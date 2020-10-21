@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useContext } from 'react';
+import React, { createContext, useReducer, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 const initialState = null;
@@ -15,6 +15,16 @@ export const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (user) {
+            dispatch({ type: 'USER', payload: user });
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <UserContext.Provider value={{ state, dispatch }}>

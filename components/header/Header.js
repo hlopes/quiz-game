@@ -5,9 +5,11 @@ import Link from 'next/link';
 
 import { Container, Menu } from 'semantic-ui-react';
 
-import styles from './Header.module.css';
+import useUserContext from '../../hooks/useUserContext';
 
 const Header = () => {
+    const { state } = useUserContext();
+
     return (
         <header>
             <Head>
@@ -23,12 +25,16 @@ const Header = () => {
                     <Menu.Item>
                         <Link href={'/'}>Home</Link>
                     </Menu.Item>
-                    <Menu.Item>
-                        <Link href={'/login'}>Login</Link>
-                    </Menu.Item>
-                    <Menu.Item>
-                        <Link href={'/register'}>Register</Link>
-                    </Menu.Item>
+                    {!state?.email && (
+                        <>
+                            <Menu.Item>
+                                <Link href={'/login'}>Login</Link>
+                            </Menu.Item>
+                            <Menu.Item>
+                                <Link href={'/register'}>Register</Link>
+                            </Menu.Item>
+                        </>
+                    )}
                 </Container>
             </Menu>
         </header>

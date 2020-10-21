@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
+
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -13,25 +14,19 @@ import {
     Dimmer,
 } from 'semantic-ui-react';
 import { useForm } from 'react-hook-form';
-import { ToastContainer } from 'react-toastify';
-import { compose } from 'recompose';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Layout from '../../components/Layout';
 import useFetchData from '../../hooks/useFetchData';
-import withGuest from '../../hooks/withGuest';
-import {
-    withNotificationProvider,
-    useNotificationContext,
-    NOTIFICATION_CATEGORIES,
-} from '../../hooks/useNotificationsContext';
 import { EMAIL_REGEX } from '../../utils/regexes';
 
-import styles from './Login.module.css';
+import styles from './Game.module.css';
 
-const Login = () => {
+const AUTOCLOSE_TOAST = 2000;
+
+const Game = () => {
     const router = useRouter();
     const [{ error, data, isLoading, isError }, doFetch] = useFetchData();
-    const { add } = useNotificationContext();
 
     const { handleSubmit, register, errors, setValue } = useForm();
 
@@ -82,17 +77,17 @@ const Login = () => {
 
     useEffect(() => {
         if (isError) {
-            add({
-                message: error?.message,
-                category: NOTIFICATION_CATEGORIES.error,
+            toast(error?.message, {
+                className: 'Toastify__toast--error',
             });
         } else if (data?.user) {
-            add({
-                category: NOTIFICATION_CATEGORIES.success,
+            toast('Success', {
+                className: 'Toastify__toast--success',
                 onClose: onSuccess,
+                autoClose: AUTOCLOSE_TOAST,
             });
         }
-    }, [add, isError, error, data, onSuccess]);
+    }, [isError, error, data, onSuccess]);
 
     return (
         <Layout>
@@ -162,6 +157,4 @@ const Login = () => {
     );
 };
 
-const enhanced = compose(withGuest, withNotificationProvider);
-
-export default enhanced(Login);
+export default Game;

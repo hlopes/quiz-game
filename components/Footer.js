@@ -1,12 +1,9 @@
 import React from 'react';
+
 import styles from '../styles/Home.module.css';
 
 const Footer = () => {
-    return (
-        <footer className={styles.footer}>
-            Powered by{' '} <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </footer>
-    );
-}
+    return <footer className={styles.footer}></footer>;
+};
 
-export default Footer
+export default Footer;

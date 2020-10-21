@@ -1,14 +1,26 @@
 import React from 'react';
 
+import { Button, Grid } from 'semantic-ui-react';
+
+import withAuth from '../hooks/withAuth';
 import Layout from '../components/Layout';
 
-export default function Home() {
+function Home() {
     return (
         <Layout>
-            <h1>Welcome to Quiz Game!</h1>
-            <p>
-                Get started by editing <code>pages/index.js</code>
-            </p>
+            <Grid.Row>
+                <Grid.Column
+                    width={5}
+                    only="tablet computer large screen widescreen"
+                >
+                    <h1>Welcome to Quiz Game!</h1>
+                    <Button primary fluid size="large">
+                        New Game
+                    </Button>
+                </Grid.Column>
+            </Grid.Row>
         </Layout>
     );
 }
+
+export default withAuth(Home);

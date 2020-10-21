@@ -1,0 +1,14 @@
+.form {
+    width: 100%;
+    min-height: 60vh;
+}
+
+.error {
+    text-align: left;
+    color: red;
+    font-size: 0.8rem;
+}
+
+.toastBody {
+    color: white;
+}

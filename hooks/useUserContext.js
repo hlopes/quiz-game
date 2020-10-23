@@ -1,4 +1,10 @@
-import React, { createContext, useReducer, useContext, useEffect } from 'react';
+import React, {
+    createContext,
+    useReducer,
+    useContext,
+    useEffect,
+    useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 
 const initialState = null;
@@ -16,6 +22,8 @@ export const UserContext = createContext({});
 export const UserContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
+    const isAuthenticated = useMemo(() => !!state?.email, [state]);
+
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
 
@@ -27,7 +35,7 @@ export const UserContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ state, dispatch }}>
+        <UserContext.Provider value={{ state, dispatch, isAuthenticated }}>
             {children}
         </UserContext.Provider>
     );

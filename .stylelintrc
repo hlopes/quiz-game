@@ -2,33 +2,5 @@
     "extends": [
         "stylelint-config-recommended",
         "stylelint-config-rational-order"
-    ],
-    "processors": [
-        [
-            "stylelint-processor-styled-components",
-            {
-                "parserPlugins": [
-                    "jsx",
-                    "objectRestSpread",
-                    ["decorators", { "decoratorsBeforeExport": true }],
-                    "classProperties",
-                    "exportExtensions",
-                    "asyncGenerators",
-                    "functionBind",
-                    "functionSent",
-                    "dynamicImport",
-                    "optionalCatchBinding",
-                    "optionalChaining",
-                    "nullishCoalescingOperator"
-                ]
-            }
-        ]
-    ],
-    "rules": {
-        "selector-type-no-unknown": [
-            true,
-            { "ignoreTypes": ["/^-styled-mixin/", "$dummyValue"] }
-        ],
-        "no-descending-specificity": null
-    }
+    ]
 }

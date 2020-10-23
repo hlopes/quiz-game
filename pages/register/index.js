@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 
-import Layout from '../../components/Layout';
+import Layout from '../../components/layout/Layout';
 import useFetchData from '../../hooks/useFetchData';
 
 import styles from './Register.module.css';

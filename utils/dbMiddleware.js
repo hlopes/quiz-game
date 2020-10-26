@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import '../models/user';
+import '../models/score';
 
 import { URI } from '../config/keys';
 

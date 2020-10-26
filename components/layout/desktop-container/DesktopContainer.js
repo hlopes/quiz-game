@@ -17,7 +17,7 @@ import useUserContext from '../../../hooks/useUserContext';
 
 const DesktopContainer = ({ children }) => {
     const router = useRouter();
-    const { isAuthenticated } = useUserContext();
+    const { isAuthenticated, logout } = useUserContext();
     const [isFixed, setIsFixed] = useState(false);
 
     const hideFixedMenu = useCallback(() => setIsFixed(false), [setIsFixed]);
@@ -91,6 +91,16 @@ const DesktopContainer = ({ children }) => {
                                             Register
                                         </Button>
                                     </Link>
+                                )}
+                                {isAuthenticated && (
+                                    <Button
+                                        onClick={logout}
+                                        inverted={!isFixed}
+                                        primary={isFixed}
+                                        style={{ marginLeft: '0.5em' }}
+                                    >
+                                        Logout
+                                    </Button>
                                 )}
                             </Menu.Item>
                         </Container>

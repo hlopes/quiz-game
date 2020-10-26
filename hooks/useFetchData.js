@@ -9,6 +9,7 @@ const dataFetcherReducer = (state, action) => {
                 isError: false,
             };
         case 'FETCH_SUCCESS':
+            console.log('### action.payload ', action.payload);
             return {
                 ...state,
                 isLoading: false,
@@ -43,7 +44,7 @@ const useFetchData = (initialData) => {
                 const result = await fetch(url, options).then((data) =>
                     data.json()
                 );
-
+                console.log('### result ', result);
                 if (result?.errorCode) {
                     return dispatch({ type: 'FETCH_FAILURE', payload: result });
                 }

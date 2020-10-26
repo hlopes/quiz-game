@@ -15,4 +15,8 @@ export default {
         errorCode: 103,
         message: 'Invalid email or password',
     },
+    INVALID_EMAIL: {
+        errorCode: 104,
+        message: 'Invalid email',
+    },
 };

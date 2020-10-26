@@ -13,11 +13,16 @@ import styles from './MobileContainer.module.css';
 
 const MobileContainer = ({ children }) => {
     const router = useRouter();
-    const { isAuthenticated } = useUserContext();
+    const { isAuthenticated, logout } = useUserContext();
     const [isSidebarOpened, setIsSidebarOpened] = useState(false);
 
     const handleSidebarHide = useCallback(() => setIsSidebarOpened(false), []);
     const handleToggle = useCallback(() => setIsSidebarOpened(true), []);
+
+    const logoutAction = useCallback(() => {
+        logout();
+        handleSidebarHide();
+    }, [handleSidebarHide, logout]);
 
     return (
         <Media as={Sidebar.Pushable} at="xs">
@@ -77,6 +82,9 @@ const MobileContainer = ({ children }) => {
                                 Register
                             </Menu.Item>
                         </Link>
+                    )}
+                    {isAuthenticated && (
+                        <Menu.Item onClick={logoutAction}>Logout</Menu.Item>
                     )}
                 </Sidebar>
                 <Sidebar.Pusher dimmed={isSidebarOpened}>

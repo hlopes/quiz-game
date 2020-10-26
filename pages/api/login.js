@@ -9,7 +9,7 @@ import errors from '../../utils/errors';
 
 const User = mongoose.model('User');
 
-const handler = (req, res) => {
+const handler = async (req, res) => {
     const { email, password } = JSON.parse(req.body);
 
     if (!email || !password) {
@@ -18,34 +18,30 @@ const handler = (req, res) => {
         return res.json({ ...errors.LOGIN_FORM_DATA_MISSING });
     }
 
-    User.findOne({ email })
-        .then((savedUser) => {
-            if (!savedUser) {
-                res.statusCode = 422;
+    try {
+        const savedUser = await User.findOne({ email });
 
-                return res.json({ ...errors.USER_NOT_FOUND });
-            }
+        if (!savedUser) {
+            res.statusCode = 422;
 
-            bcrypt
-                .compare(password, savedUser.password)
-                .then((doMatch) => {
-                    if (doMatch) {
-                        const token = jwt.sign(
-                            { _id: savedUser._id },
-                            JWT_SECRET
-                        );
-                        const { _id, name, email } = savedUser;
+            return res.json({ ...errors.USER_NOT_FOUND });
+        }
 
-                        return res.json({ token, user: { _id, name, email } });
-                    }
+        const doMatch = await bcrypt.compare(password, savedUser.password);
 
-                    res.statusCode = 422;
+        if (doMatch) {
+            const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
+            const { _id, name, email } = savedUser;
 
-                    return res.json({ ...errors.USER_NOT_FOUND });
-                })
-                .catch((error) => console.log('Error ', error));
-        })
-        .catch((error) => console.log('Error ', error));
+            return res.json({ token, user: { _id, name, email } });
+        }
+
+        res.statusCode = 422;
+
+        return res.json({ ...errors.USER_NOT_FOUND });
+    } catch (error) {
+        console.log('Error ', error);
+    }
 };
 
 export default connectToDatabase(handler);

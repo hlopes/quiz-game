@@ -4,6 +4,7 @@ import React, {
     useContext,
     useEffect,
     useMemo,
+    useCallback,
 } from 'react';
 import PropTypes from 'prop-types';
 
@@ -24,6 +25,11 @@ export const UserContextProvider = ({ children }) => {
 
     const isAuthenticated = useMemo(() => !!state?.email, [state]);
 
+    const logout = useCallback(() => {
+        localStorage.removeItem('user');
+        dispatch({ type: 'USER', payload: null });
+    }, [dispatch]);
+
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
 
@@ -35,7 +41,9 @@ export const UserContextProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ state, dispatch, isAuthenticated }}>
+        <UserContext.Provider
+            value={{ state, dispatch, isAuthenticated, logout }}
+        >
             {children}
         </UserContext.Provider>
     );

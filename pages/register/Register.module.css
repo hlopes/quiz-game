@@ -1,3 +1,13 @@
 .form {
-    padding-top: 5rem;
+    min-height: 60vh;
+}
+
+.error {
+    color: red;
+    font-size: 0.8rem;
+    text-align: left;
+}
+
+.toastBody {
+    color: white;
 }

@@ -14,3 +14,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
+table.ui.table {
+  margin: 0 auto;
+}

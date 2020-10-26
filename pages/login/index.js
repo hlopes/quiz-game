@@ -119,7 +119,7 @@ const Login = () => {
                     />
                     <Grid.Column mobile={16} tablet={8} computer={6}>
                         <HeaderSem as="h2" textAlign="center" inverted>
-                            Login
+                            Welcome Back
                         </HeaderSem>
                         <Form size="large" onSubmit={handleSubmit(submit)}>
                             <Segment stacked>

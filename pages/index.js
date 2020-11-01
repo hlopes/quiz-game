@@ -9,24 +9,30 @@ import {
     Image,
 } from 'semantic-ui-react';
 
+import useTop10 from '../hooks/useTop10';
+import getRandomAvatar from '../utils/randomAvatar';
 import Layout from '../components/layout/Layout';
 
 const Home = () => {
+    const {
+        data: { top },
+    } = useTop10();
+
     return (
         <Layout>
             <Segment vertical inverted>
                 <Grid container stackable verticalAlign="middle" centered>
                     <Grid.Row>
-                        <Grid.Column mobile={16} tablet={8} computer={6}>
+                        <Grid.Column
+                            mobile={16}
+                            tablet={8}
+                            computer={6}
+                            textAlign="center"
+                        >
                             <Header as="h3" inverted>
                                 Welcome to Quiz Game
                             </Header>
-                            <p>
-                                We can give your company superpowers to do
-                                things that they never thought possible. Let us
-                                delight your customers and empower your needs...
-                                through pure data analytics.
-                            </p>
+                            <p>This is just a show case game using NextJS.</p>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -57,66 +63,25 @@ const Home = () => {
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
-                                    <Table.Row>
-                                        <Table.Cell>
-                                            <Header as="h4" image inverted>
-                                                <Image
-                                                    src="https://react.semantic-ui.com/images/avatar/small/lena.png"
-                                                    rounded
-                                                    size="mini"
-                                                />
-                                                <Header.Content>
-                                                    Lena
-                                                </Header.Content>
-                                            </Header>
-                                        </Table.Cell>
-                                        <Table.Cell>22</Table.Cell>
-                                    </Table.Row>
-                                    <Table.Row>
-                                        <Table.Cell>
-                                            <Header as="h4" image inverted>
-                                                <Image
-                                                    src="https://react.semantic-ui.com/images/avatar/small/matthew.png"
-                                                    rounded
-                                                    size="mini"
-                                                />
-                                                <Header.Content>
-                                                    Matthew
-                                                </Header.Content>
-                                            </Header>
-                                        </Table.Cell>
-                                        <Table.Cell>15</Table.Cell>
-                                    </Table.Row>
-                                    <Table.Row>
-                                        <Table.Cell>
-                                            <Header as="h4" image inverted>
-                                                <Image
-                                                    src="https://react.semantic-ui.com/images/avatar/small/lindsay.png"
-                                                    rounded
-                                                    size="mini"
-                                                />
-                                                <Header.Content>
-                                                    Lindsay
-                                                </Header.Content>
-                                            </Header>
-                                        </Table.Cell>
-                                        <Table.Cell>12</Table.Cell>
-                                    </Table.Row>
-                                    <Table.Row>
-                                        <Table.Cell>
-                                            <Header as="h4" image inverted>
-                                                <Image
-                                                    src="https://react.semantic-ui.com/images/avatar/small/mark.png"
-                                                    rounded
-                                                    size="mini"
-                                                />
-                                                <Header.Content>
-                                                    Mark
-                                                </Header.Content>
-                                            </Header>
-                                        </Table.Cell>
-                                        <Table.Cell>11</Table.Cell>
-                                    </Table.Row>
+                                    {top.map((player, index) => (
+                                        <Table.Row key={index}>
+                                            <Table.Cell>
+                                                <Header as="h4" image inverted>
+                                                    <Image
+                                                        src={getRandomAvatar()}
+                                                        rounded
+                                                        size="mini"
+                                                    />
+                                                    <Header.Content>
+                                                        {player.name}
+                                                    </Header.Content>
+                                                </Header>
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                {player.score}%
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    ))}
                                 </Table.Body>
                             </Table>
                         </Grid.Column>

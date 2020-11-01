@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 const NotificationContext = React.createContext({});
 
-const AUTOCLOSE_TOAST = 2000;
+const AUTOCLOSE_TOAST = 1000;
 
 export const NOTIFICATION_CATEGORIES = {
     error: 'ERROR',

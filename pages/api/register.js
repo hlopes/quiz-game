@@ -6,7 +6,6 @@ import connectToDatabase from '../../utils/dbMiddleware';
 import errors from '../../utils/errors';
 
 const User = mongoose.model('User');
-const Score = mongoose.model('Score');
 
 const handler = async (req, res) => {
     const { name, email, password } = JSON.parse(req.body);
@@ -44,10 +43,6 @@ const handler = async (req, res) => {
             const newUser = user.save();
 
             if (newUser) {
-                const score = new Score({ user: savedUser, points: 0 });
-
-                await score.save();
-
                 const token = jwt.sign(
                     { _id: user._id },
                     process.env.JWT_SECRET

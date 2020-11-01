@@ -13,6 +13,21 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    points: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+    questionsAnswered: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+    score: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
 });
 
 try {

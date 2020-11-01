@@ -19,6 +19,10 @@ import useQuestions from '../../hooks/useQuestions';
 import Layout from '../../components/layout/Layout';
 import Question from '../../components/question/Question';
 
+import useSetScore from '../../hooks/useSetScore';
+
+import useUserContext from '../../hooks/useUserContext';
+
 import styles from './Game.module.css';
 
 const questionDifficultyTypes = [
@@ -37,44 +41,70 @@ const questionDifficultyTypes = [
 ];
 
 const Game = () => {
+    const {
+        state: { email },
+    } = useUserContext();
+
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [score, setScore] = useState(0);
     const [displayScore, setDisplayScore] = useState(false);
 
-    const { error, data, isLoading, refetch } = useQuestions();
+    const {
+        error: getQuestionsError,
+        data: getQuestionsData,
+        isLoading: getQuestionsLoading,
+        refetch,
+    } = useQuestions();
+
+    const [setScoreAPI] = useSetScore();
 
     const currentQuestion = useMemo(
-        () => data?.results?.[currentQuestionIndex],
-        [currentQuestionIndex, data?.results]
+        () => getQuestionsData?.results?.[currentQuestionIndex],
+        [currentQuestionIndex, getQuestionsData?.results]
+    );
+
+    const updateScore = useCallback(
+        async (finalScore) => {
+            await setScoreAPI({
+                email,
+                points: finalScore,
+                questions: getQuestionsData?.results?.length,
+            });
+
+            setDisplayScore(true);
+        },
+        [email, getQuestionsData?.results?.length, score, setScoreAPI]
     );
 
     const handleNext = useCallback(
         (isLast) => () => {
             const isCorrect =
                 selectedAnswer === currentQuestion?.correct_answer;
-
-            if (isCorrect) {
-                setScore(score + 1);
-            }
+            const currentScore = isCorrect ? score + 1 : score;
 
             if (!isLast) {
-                setCurrentQuestionIndex(
+                if (isCorrect) {
+                    setScore(currentScore);
+                }
+
+                return setCurrentQuestionIndex(
                     Math.min(
                         currentQuestionIndex + 1,
-                        data?.results?.length - 1
+                        getQuestionsData?.results?.length - 1
                     )
                 );
-            } else {
-                setDisplayScore(true);
             }
+
+            return updateScore(currentScore);
         },
         [
             selectedAnswer,
             currentQuestion?.correct_answer,
+            updateScore,
             score,
             currentQuestionIndex,
-            data?.results?.length,
+            getQuestionsData?.results?.length,
         ]
     );
 
@@ -92,7 +122,9 @@ const Game = () => {
         await refetch();
     }, [refetch]);
 
-    const hasError = error || data?.response_code !== 0;
+    const hasError =
+        getQuestionsError ||
+        (getQuestionsData && getQuestionsData.response_code !== 0);
 
     if (hasError) {
         return <Layout>Something went wrong</Layout>;
@@ -102,9 +134,10 @@ const Game = () => {
         (type) => type?.value === currentQuestion?.difficulty
     )?.[0];
 
-    const isLastQuestion = currentQuestionIndex === data?.results?.length - 1;
+    const isLastQuestion =
+        currentQuestionIndex === getQuestionsData?.results?.length - 1;
 
-    return isLoading || !data?.results ? (
+    return getQuestionsLoading || !getQuestionsData?.results ? (
         <Dimmer active inverted>
             <Loader size="big">Loading</Loader>
         </Dimmer>
@@ -123,13 +156,13 @@ const Game = () => {
                             </Header>
                             <Statistic inverted>
                                 <Statistic.Value>
-                                    {score}/{data?.results?.length}
+                                    {score}/{getQuestionsData?.results?.length}
                                 </Statistic.Value>
                                 <Statistic.Label>
                                     <Rating
                                         disabled
                                         maxRating={5}
-                                        defaultRating={3}
+                                        defaultRating={score / 2}
                                         icon="star"
                                         size="massive"
                                     />

@@ -13,9 +13,7 @@ import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { compose } from 'recompose';
 
-import Layout from '../../components/layout/Layout';
-import useFetchData from '../../hooks/useFetchData';
-
+import { EMAIL_REGEX } from '../../utils/regexes';
 import {
     NOTIFICATION_CATEGORIES,
     useNotificationContext,
@@ -23,30 +21,25 @@ import {
 } from '../../hooks/useNotificationsContext';
 import useUserContext from '../../hooks/useUserContext';
 import withGuest from '../../hooks/withGuest';
-import { EMAIL_REGEX } from '../../utils/regexes';
+import useRegister from '../../hooks/useRegister';
+import Layout from '../../components/layout/Layout';
 
 import styles from './Register.module.css';
 
 const Register = () => {
     const router = useRouter();
-    const [{ error, data, isLoading, isError }, doFetch] = useFetchData();
-    const { add } = useNotificationContext();
+    const { add, clear } = useNotificationContext();
     const { dispatch } = useUserContext();
 
+    const [registerUser, { isLoading, data, error }] = useRegister();
     const { handleSubmit, register, errors, setValue } = useForm();
 
     const submit = useCallback(
         ({ name, username, password }) => {
-            doFetch('/api/register', {
-                method: 'POST',
-                body: JSON.stringify({
-                    name,
-                    email: username,
-                    password,
-                }),
-            });
+            // TODO deal with promise
+            registerUser({ name, username, password });
         },
-        [doFetch]
+        [registerUser]
     );
 
     const changeValue = useCallback(
@@ -90,9 +83,11 @@ const Register = () => {
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (isError) {
+        clear();
+
+        if (error || data?.errorCode) {
             add({
-                message: error?.message,
+                message: error?.message ?? data?.message,
                 category: NOTIFICATION_CATEGORIES.error,
             });
         } else if (data?.user) {
@@ -101,7 +96,7 @@ const Register = () => {
                 onClose: onSuccess,
             });
         }
-    }, [add, isError, error, data, onSuccess]);
+    }, [add, error, data, onSuccess, clear]);
 
     return (
         <Layout>

@@ -7,7 +7,9 @@ const useQuestions = () => {
         return result.json();
     };
 
-    return useQuery('questions', fetchQuestions);
+    return useQuery('questions', fetchQuestions, {
+        refetchOnWindowFocus: false,
+    });
 };
 
 export default useQuestions;

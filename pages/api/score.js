@@ -4,10 +4,9 @@ import connectToDatabase from '../../utils/dbMiddleware';
 import errors from '../../utils/errors';
 
 const User = mongoose.model('User');
-const Score = mongoose.model('Score');
 
 const handler = async (req, res) => {
-    const { email, points } = JSON.parse(req.body);
+    const { email, points, questions } = JSON.parse(req.body);
 
     if (!email) {
         res.statusCode = 422;
@@ -23,7 +22,20 @@ const handler = async (req, res) => {
         return res.json({ ...errors.INVALID_EMAIL });
     }
 
-    await Score.updateOne({ user: savedUser }, { points });
+    const totalPoints = savedUser?.points + points;
+    const totalQuestions = savedUser?.questionsAnswered + questions;
+    const score = (
+        Math.round(((totalPoints * 100) / totalQuestions) * 100) / 100
+    ).toFixed(2);
+
+    await User.updateOne(
+        { email },
+        {
+            points: savedUser?.points + points,
+            questionsAnswered: savedUser?.questionsAnswered + questions,
+            score,
+        }
+    );
 
     return res.json({
         message: 'Saved successfully',

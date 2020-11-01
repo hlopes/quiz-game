@@ -9,7 +9,7 @@
     "lint": "yarn eslint && yarn stylelint \"**/*.css\""
   },
   "dependencies": {
-    "next": "9.5.3",
+    "next": "^10.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
@@ -34,6 +34,8 @@
     "prettier-eslint-cli": "^5.0.0",
     "prop-types": "^15.7.2",
     "react-hook-form": "^6.8.6",
+    "react-query": "^2.25.2",
+    "react-query-devtools": "^2.6.0",
     "react-toastify": "^6.0.8",
     "recompose": "^0.30.0",
     "semantic-ui-css": "^2.4.1",

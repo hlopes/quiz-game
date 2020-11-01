@@ -2,8 +2,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from '../../config/keys';
-
 import connectToDatabase from '../../utils/dbMiddleware';
 import errors from '../../utils/errors';
 
@@ -27,10 +25,19 @@ const handler = async (req, res) => {
             return res.json({ ...errors.USER_NOT_FOUND });
         }
 
+        if (!process.env.JWT_SECRET) {
+            res.statusCode = 422;
+
+            return res.json({ ...errors.SECRET_NOT_DEFINED });
+        }
+
         const doMatch = await bcrypt.compare(password, savedUser.password);
 
         if (doMatch) {
-            const token = jwt.sign({ _id: savedUser._id }, JWT_SECRET);
+            const token = jwt.sign(
+                { _id: savedUser._id },
+                process.env.JWT_SECRET
+            );
             const { _id, name, email } = savedUser;
 
             return res.json({ token, user: { _id, name, email } });

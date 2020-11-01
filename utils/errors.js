@@ -15,8 +15,12 @@ export default {
         errorCode: 103,
         message: 'Invalid email or password',
     },
-    INVALID_EMAIL: {
+    SECRET_NOT_DEFINED: {
         errorCode: 104,
+        message: 'Secret for token is not defined',
+    },
+    INVALID_EMAIL: {
+        errorCode: 105,
         message: 'Invalid email',
     },
 };

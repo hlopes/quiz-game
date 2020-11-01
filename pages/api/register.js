@@ -2,8 +2,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from '../../config/keys';
-
 import connectToDatabase from '../../utils/dbMiddleware';
 import errors from '../../utils/errors';
 
@@ -28,6 +26,12 @@ const handler = async (req, res) => {
             return res.json({ ...errors.ALREADY_REGISTERED });
         }
 
+        if (!process.env.JWT_SECRET) {
+            res.statusCode = 422;
+
+            return res.json({ ...errors.SECRET_NOT_DEFINED });
+        }
+
         const hashed = await bcrypt.hash(password, 12);
 
         if (hashed) {
@@ -44,7 +48,12 @@ const handler = async (req, res) => {
 
                 await score.save();
 
-                const token = jwt.sign({ _id: user._id }, JWT_SECRET);
+                const token = jwt.sign(
+                    { _id: user._id },
+                    process.env.JWT_SECRET
+                );
+
+                res.status(201);
 
                 return res.json({
                     message: 'Saved successfully',

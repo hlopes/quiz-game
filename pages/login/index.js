@@ -16,40 +16,30 @@ import { useForm } from 'react-hook-form';
 import { ToastContainer } from 'react-toastify';
 import { compose } from 'recompose';
 
-import Layout from '../../components/layout/Layout';
-import useFetchData from '../../hooks/useFetchData';
-import withGuest from '../../hooks/withGuest';
+import { EMAIL_REGEX } from '../../utils/regexes';
 import {
     withNotificationProvider,
     useNotificationContext,
     NOTIFICATION_CATEGORIES,
 } from '../../hooks/useNotificationsContext';
-import { EMAIL_REGEX } from '../../utils/regexes';
-
+import withGuest from '../../hooks/withGuest';
+import useLogin from '../../hooks/useLogin';
 import useUserContext from '../../hooks/useUserContext';
+import Layout from '../../components/layout/Layout';
 
 import styles from './Login.module.css';
 
 const Login = () => {
     const router = useRouter();
-    const [{ error, data, isLoading, isError }, doFetch] = useFetchData();
-    const { add } = useNotificationContext();
+    const { add, clear } = useNotificationContext();
     const { dispatch } = useUserContext();
 
-    const { handleSubmit, register, errors, setValue } = useForm();
+    const { handleSubmit, register, errors, setValue, getValues } = useForm();
 
-    const submit = useCallback(
-        ({ username, password }) => {
-            doFetch('/api/login', {
-                method: 'POST',
-                body: JSON.stringify({
-                    email: username,
-                    password,
-                }),
-            });
-        },
-        [doFetch]
-    );
+    const { username, password } = getValues();
+    const { error, data, isLoading, refetch } = useLogin(username, password);
+
+    const submit = useCallback(() => refetch(), [refetch]);
 
     const changeValue = useCallback(
         (e, { name, value }) => {
@@ -86,9 +76,11 @@ const Login = () => {
     }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (isError) {
+        clear();
+
+        if (error || data?.errorCode) {
             add({
-                message: error?.message,
+                message: error?.message ?? data?.message,
                 category: NOTIFICATION_CATEGORIES.error,
             });
         } else if (data?.user) {
@@ -97,7 +89,8 @@ const Login = () => {
                 onClose: onSuccess,
             });
         }
-    }, [add, isError, error, data, onSuccess]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [add, error, onSuccess, data]);
 
     return (
         <Layout>

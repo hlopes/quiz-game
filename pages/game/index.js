@@ -1,44 +1,108 @@
-import React, { useEffect } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import he from 'he';
 import {
     Dimmer,
     Grid,
     Loader,
     Card,
-    Image,
     Icon,
-    List,
     Segment,
+    Button,
+    Label,
+    Statistic,
+    Rating,
+    Header,
 } from 'semantic-ui-react';
 
-import shuffle from '../../utils/shuffle';
-import Layout from '../../components/layout/Layout';
 import withAuth from '../../hooks/withAuth';
-import useFetchData from '../../hooks/useFetchData';
-
+import useQuestions from '../../hooks/useQuestions';
+import Layout from '../../components/layout/Layout';
 import Question from '../../components/question/Question';
 
 import styles from './Game.module.css';
 
-import data from './data.json';
+const questionDifficultyTypes = [
+    {
+        value: 'easy',
+        color: 'green',
+    },
+    {
+        value: 'medium',
+        color: 'orange',
+    },
+    {
+        value: 'hard',
+        color: 'red',
+    },
+];
 
 const Game = () => {
-    //const [{ error, data, isLoading, isError }, doFetch] = useFetchData();
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [score, setScore] = useState(0);
+    const [displayScore, setDisplayScore] = useState(false);
 
-    //const { handleSubmit, register, errors, setValue } = useForm();
+    const { error, data, isLoading, refetch } = useQuestions();
 
-    // useEffect(() => {
-    //     doFetch('https://opentdb.com/api.php?amount=10');
-    // }, [doFetch]);
-    //
-    // const hasError = isError || error || data?.response_code !== 0;
-    //
-    // if (hasError) {
-    //     return <Layout>Something went wrong</Layout>;
-    // }
+    const currentQuestion = useMemo(
+        () => data?.results?.[currentQuestionIndex],
+        [currentQuestionIndex, data?.results]
+    );
 
-    console.log('### results ', data?.results);
-    let isLoading = false;
+    const handleNext = useCallback(
+        (isLast) => () => {
+            const isCorrect =
+                selectedAnswer === currentQuestion?.correct_answer;
+
+            if (isCorrect) {
+                setScore(score + 1);
+            }
+
+            if (!isLast) {
+                setCurrentQuestionIndex(
+                    Math.min(
+                        currentQuestionIndex + 1,
+                        data?.results?.length - 1
+                    )
+                );
+            } else {
+                setDisplayScore(true);
+            }
+        },
+        [
+            selectedAnswer,
+            currentQuestion?.correct_answer,
+            score,
+            currentQuestionIndex,
+            data?.results?.length,
+        ]
+    );
+
+    const handleAnswerSelection = useCallback(
+        (answer) => setSelectedAnswer(answer),
+        []
+    );
+
+    const handleReset = useCallback(async () => {
+        setCurrentQuestionIndex(0);
+        setSelectedAnswer(null);
+        setScore(0);
+        setDisplayScore(false);
+
+        await refetch();
+    }, [refetch]);
+
+    const hasError = error || data?.response_code !== 0;
+
+    if (hasError) {
+        return <Layout>Something went wrong</Layout>;
+    }
+
+    const questionDifficultyType = questionDifficultyTypes.filter(
+        (type) => type?.value === currentQuestion?.difficulty
+    )?.[0];
+
+    const isLastQuestion = currentQuestionIndex === data?.results?.length - 1;
 
     return isLoading || !data?.results ? (
         <Dimmer active inverted>
@@ -51,53 +115,87 @@ const Game = () => {
                 textAlign="center"
                 verticalAlign="middle"
             >
-                {data?.results.map((question, index) => {
-                    return (
-                        <Card fluid key={index}>
-                            <Image
-                                src="https://react.semantic-ui.com/images/wireframe/square-image.png"
-                                size="medium"
-                            />
-                            <Card.Content>
-                                <Card.Header>
-                                    {he.decode(question?.question)}
-                                </Card.Header>
-                                <Card.Description>
-                                    {question?.category}
+                {displayScore ? (
+                    <Segment.Group>
+                        <Segment padded="very" inverted>
+                            <Header as="h2" inverted>
+                                Your Score is
+                            </Header>
+                            <Statistic inverted>
+                                <Statistic.Value>
+                                    {score}/{data?.results?.length}
+                                </Statistic.Value>
+                                <Statistic.Label>
+                                    <Rating
+                                        disabled
+                                        maxRating={5}
+                                        defaultRating={3}
+                                        icon="star"
+                                        size="massive"
+                                    />
+                                </Statistic.Label>
+                            </Statistic>
+                        </Segment>
+                        <Segment inverted>
+                            <Button primary onClick={handleReset} size="big">
+                                Try Again?
+                            </Button>
+                        </Segment>
+                    </Segment.Group>
+                ) : (
+                    <Card fluid>
+                        <Card.Content>
+                            {questionDifficultyType && (
+                                <Card.Description className={styles.difficulty}>
+                                    <Label
+                                        as="span"
+                                        color={questionDifficultyType?.color}
+                                        tag
+                                    >
+                                        {questionDifficultyType?.value}
+                                    </Label>
                                 </Card.Description>
-                            </Card.Content>
-                            <Card.Content extra>
-                                <Segment>
-                                    <List divided relaxed>
-                                        <List.Item>
-                                            <List.Content>
-                                                <List.Header>
-                                                    Snickerdoodle
-                                                </List.Header>
-                                                An excellent companion
-                                            </List.Content>
-                                        </List.Item>
-                                        <List.Item>
-                                            <List.Content>
-                                                <List.Header>
-                                                    Poodle
-                                                </List.Header>
-                                                A poodle, its pretty basic
-                                            </List.Content>
-                                        </List.Item>
-                                        <List.Item>
-                                            <List.Content>
-                                                <List.Header>Paulo</List.Header>
-                                                He's also a dog
-                                            </List.Content>
-                                        </List.Item>
-                                    </List>
-                                </Segment>
-                                <Question question={question} />
-                            </Card.Content>
-                        </Card>
-                    );
-                })}
+                            )}
+                            <Card.Header>
+                                {he.decode(currentQuestion?.question)}
+                            </Card.Header>
+                            <Card.Description>
+                                {currentQuestion?.category}
+                            </Card.Description>
+                        </Card.Content>
+                        <Card.Content extra>
+                            <Question
+                                question={currentQuestion}
+                                onAnswerSelection={handleAnswerSelection}
+                            />
+                        </Card.Content>
+                        <Card.Content extra textAlign="right">
+                            {!isLastQuestion ? (
+                                <Button
+                                    icon
+                                    labelPosition="right"
+                                    primary
+                                    onClick={handleNext()}
+                                    size="big"
+                                >
+                                    Next
+                                    <Icon name="right arrow" />
+                                </Button>
+                            ) : (
+                                <Button
+                                    icon
+                                    labelPosition="right"
+                                    primary
+                                    onClick={handleNext(true)}
+                                    size="big"
+                                >
+                                    End
+                                    <Icon name="right arrow" />
+                                </Button>
+                            )}
+                        </Card.Content>
+                    </Card>
+                )}
             </Grid>
         </Layout>
     );

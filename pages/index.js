@@ -1,5 +1,5 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import {
     Grid,
     Header,
@@ -9,12 +9,11 @@ import {
     Image,
 } from 'semantic-ui-react';
 
-//import useTop10 from '../hooks/useTop10';
 import getRandomAvatar from '../utils/randomAvatar';
 import { connectToDatabase } from '../utils/mongodb';
 import Layout from '../components/layout/Layout';
 
-const Home = ({ isConnected }) => {
+const Home = ({ top }) => {
     return (
         <Layout>
             <Segment vertical inverted>
@@ -27,7 +26,7 @@ const Home = ({ isConnected }) => {
                             textAlign="center"
                         >
                             <Header as="h3" inverted>
-                                ###{isConnected}### Welcome to Quiz Game
+                                Welcome to Quiz Game
                             </Header>
                             <p>This is just a show case game using NextJS.</p>
                         </Grid.Column>
@@ -60,7 +59,7 @@ const Home = ({ isConnected }) => {
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
-                                    {[]?.map((player, index) => (
+                                    {top?.map((player, index) => (
                                         <Table.Row key={index}>
                                             <Table.Cell>
                                                 <Header as="h4" image inverted>
@@ -87,6 +86,10 @@ const Home = ({ isConnected }) => {
             </Segment>
         </Layout>
     );
+};
+
+Home.propTypes = {
+    top: PropTypes.array,
 };
 
 export default Home;

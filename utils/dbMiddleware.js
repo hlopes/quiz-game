@@ -6,11 +6,11 @@ import '../models/score';
 const mongoOptions = { useNewUrlParser: true, useUnifiedTopology: true };
 
 const connectToDatabase = async () => {
-    if (mongoose.connections[0].readyState || !process.env.DATABASE_URL) {
+    if (mongoose.connections[0].readyState || !process.env.MONGODB_URI) {
         return;
     }
 
-    await mongoose.connect(encodeURI(process.env.DATABASE_URL), mongoOptions);
+    await mongoose.connect(encodeURI(process.env.MONGODB_URI), mongoOptions);
 };
 
 const addDatabase = (handler) => async (req, res) => {

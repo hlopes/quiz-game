@@ -29,6 +29,7 @@
     "he": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
+    "mongodb": "^3.6.2",
     "mongoose": "^5.10.5",
     "prettier": "^2.1.2",
     "prettier-eslint-cli": "^5.0.0",

@@ -9,12 +9,13 @@ import {
     Image,
 } from 'semantic-ui-react';
 
-import useTop10 from '../hooks/useTop10';
+//import useTop10 from '../hooks/useTop10';
 import getRandomAvatar from '../utils/randomAvatar';
+import { connectToDatabase } from '../utils/mongodb';
 import Layout from '../components/layout/Layout';
 
-const Home = () => {
-    const { data } = useTop10();
+const Home = ({ top }) => {
+    //const { data } = useTop10();
 
     return (
         <Layout>
@@ -61,7 +62,7 @@ const Home = () => {
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
-                                    {data?.top?.map((player, index) => (
+                                    {top?.map((player, index) => (
                                         <Table.Row key={index}>
                                             <Table.Cell>
                                                 <Header as="h4" image inverted>
@@ -91,3 +92,20 @@ const Home = () => {
 };
 
 export default Home;
+
+export async function getStaticProps() {
+    const { db } = await connectToDatabase();
+
+    const users = await db
+        .collection('users')
+        .find()
+        .limit(10)
+        .sort({ score: -1 })
+        .toArray();
+
+    return {
+        props: {
+            top: JSON.parse(JSON.stringify(users)),
+        },
+    };
+}

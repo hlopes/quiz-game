@@ -14,9 +14,7 @@ import getRandomAvatar from '../utils/randomAvatar';
 import Layout from '../components/layout/Layout';
 
 const Home = () => {
-    const {
-        data: { top },
-    } = useTop10();
+    const { data } = useTop10();
 
     return (
         <Layout>
@@ -63,7 +61,7 @@ const Home = () => {
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
-                                    {top.map((player, index) => (
+                                    {data?.top?.map((player, index) => (
                                         <Table.Row key={index}>
                                             <Table.Cell>
                                                 <Header as="h4" image inverted>

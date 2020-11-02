@@ -93,7 +93,7 @@ const Home = ({ top }) => {
 
 export default Home;
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
     const { db } = await connectToDatabase();
 
     const users = await db

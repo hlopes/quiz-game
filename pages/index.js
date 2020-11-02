@@ -14,9 +14,7 @@ import getRandomAvatar from '../utils/randomAvatar';
 import { connectToDatabase } from '../utils/mongodb';
 import Layout from '../components/layout/Layout';
 
-const Home = ({ top }) => {
-    //const { data } = useTop10();
-
+const Home = ({ isConnected }) => {
     return (
         <Layout>
             <Segment vertical inverted>
@@ -29,7 +27,7 @@ const Home = ({ top }) => {
                             textAlign="center"
                         >
                             <Header as="h3" inverted>
-                                Welcome to Quiz Game
+                                ###{isConnected}### Welcome to Quiz Game
                             </Header>
                             <p>This is just a show case game using NextJS.</p>
                         </Grid.Column>
@@ -62,7 +60,7 @@ const Home = ({ top }) => {
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
-                                    {top?.map((player, index) => (
+                                    {[]?.map((player, index) => (
                                         <Table.Row key={index}>
                                             <Table.Cell>
                                                 <Header as="h4" image inverted>
@@ -94,18 +92,28 @@ const Home = ({ top }) => {
 export default Home;
 
 export async function getServerSideProps() {
-    const { db } = await connectToDatabase();
+    const { client } = await connectToDatabase();
 
-    const users = await db
-        .collection('users')
-        .find()
-        .limit(10)
-        .sort({ score: -1 })
-        .toArray();
+    const isConnected = await client.isConnected(); // Returns true or false
 
     return {
-        props: {
-            top: JSON.parse(JSON.stringify(users)),
-        },
+        props: { isConnected },
     };
 }
+
+// export async function getServerSideProps() {
+//     const { db } = await connectToDatabase();
+//
+//     const users = await db
+//         .collection('users')
+//         .find()
+//         .limit(10)
+//         .sort({ score: -1 })
+//         .toArray();
+//
+//     return {
+//         props: {
+//             top: JSON.parse(JSON.stringify(users)),
+//         },
+//     };
+// }

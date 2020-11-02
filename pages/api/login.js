@@ -1,11 +1,8 @@
-import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import connectToDatabase from '../../utils/dbMiddleware';
+import { connectToDatabase } from '../../utils/mongodb';
 import errors from '../../utils/errors';
-
-const User = mongoose.model('User');
 
 const handler = async (req, res) => {
     const { email, password } = JSON.parse(req.body);
@@ -17,7 +14,9 @@ const handler = async (req, res) => {
     }
 
     try {
-        const savedUser = await User.findOne({ email });
+        const { db } = await connectToDatabase();
+
+        const savedUser = await db.collection('users').findOne({ email });
 
         if (!savedUser) {
             res.statusCode = 422;
@@ -51,4 +50,4 @@ const handler = async (req, res) => {
     }
 };
 
-export default connectToDatabase(handler);
+export default handler;

@@ -1,9 +1,5 @@
-import mongoose from 'mongoose';
-
-import connectToDatabase from '../../utils/dbMiddleware';
+import { connectToDatabase } from '../../utils/mongodb';
 import errors from '../../utils/errors';
-
-const User = mongoose.model('User');
 
 const handler = async (req, res) => {
     const { email, points, questions } = JSON.parse(req.body);
@@ -14,7 +10,9 @@ const handler = async (req, res) => {
         return res.json({ ...errors.INVALID_EMAIL });
     }
 
-    const savedUser = await User.findOne({ email });
+    const { db } = await connectToDatabase();
+
+    const savedUser = await db.collection('users').findOne({ email });
 
     if (!savedUser) {
         res.statusCode = 422;
@@ -28,12 +26,14 @@ const handler = async (req, res) => {
         Math.round(((totalPoints * 100) / totalQuestions) * 100) / 100
     ).toFixed(2);
 
-    await User.updateOne(
+    await db.collection('users').updateOne(
         { email },
         {
-            points: savedUser?.points + points,
-            questionsAnswered: savedUser?.questionsAnswered + questions,
-            score,
+            $set: {
+                points: savedUser?.points + points,
+                questionsAnswered: savedUser?.questionsAnswered + questions,
+                score,
+            },
         }
     );
 
@@ -42,4 +42,4 @@ const handler = async (req, res) => {
     });
 };
 
-export default connectToDatabase(handler);
+export default handler;

@@ -1,11 +1,8 @@
-import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import connectToDatabase from '../../utils/dbMiddleware';
+import { connectToDatabase } from '../../utils/mongodb';
 import errors from '../../utils/errors';
-
-const User = mongoose.model('User');
 
 const handler = async (req, res) => {
     const { name, email, password } = JSON.parse(req.body);
@@ -17,7 +14,9 @@ const handler = async (req, res) => {
     }
 
     try {
-        const savedUser = await User.findOne({ email });
+        const { db } = await connectToDatabase();
+
+        const savedUser = await db.collection('users').findOne({ email });
 
         if (savedUser) {
             res.statusCode = 422;
@@ -34,28 +33,23 @@ const handler = async (req, res) => {
         const hashed = await bcrypt.hash(password, 12);
 
         if (hashed) {
-            const user = new User({
+            const user = {
                 email,
                 name,
                 password: hashed,
+            };
+
+            await db.collection('users').insertOne(user);
+
+            const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
+
+            res.status(201);
+
+            return res.json({
+                message: 'Saved successfully',
+                user,
+                token,
             });
-
-            const newUser = user.save();
-
-            if (newUser) {
-                const token = jwt.sign(
-                    { _id: user._id },
-                    process.env.JWT_SECRET
-                );
-
-                res.status(201);
-
-                return res.json({
-                    message: 'Saved successfully',
-                    user,
-                    token,
-                });
-            }
         }
     } catch (error) {
         console.log('Error ', error);

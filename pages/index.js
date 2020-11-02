@@ -92,28 +92,18 @@ const Home = ({ isConnected }) => {
 export default Home;
 
 export async function getServerSideProps() {
-    const { client } = await connectToDatabase();
+    const { db } = await connectToDatabase();
 
-    const isConnected = await client.isConnected(); // Returns true or false
+    const users = await db
+        .collection('users')
+        .find()
+        .limit(10)
+        .sort({ score: -1 })
+        .toArray();
 
     return {
-        props: { isConnected },
+        props: {
+            top: JSON.parse(JSON.stringify(users)),
+        },
     };
 }
-
-// export async function getServerSideProps() {
-//     const { db } = await connectToDatabase();
-//
-//     const users = await db
-//         .collection('users')
-//         .find()
-//         .limit(10)
-//         .sort({ score: -1 })
-//         .toArray();
-//
-//     return {
-//         props: {
-//             top: JSON.parse(JSON.stringify(users)),
-//         },
-//     };
-// }

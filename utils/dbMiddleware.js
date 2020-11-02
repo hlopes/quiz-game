@@ -10,7 +10,7 @@ const connectToDatabase = async () => {
         return;
     }
 
-    await mongoose.connect(process.env.DATABASE_URL, mongoOptions);
+    await mongoose.connect(encodeURI(process.env.DATABASE_URL), mongoOptions);
 };
 
 const addDatabase = (handler) => async (req, res) => {

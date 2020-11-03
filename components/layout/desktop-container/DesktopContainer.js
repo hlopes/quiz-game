@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import { Media } from '../../media/Media';
-import useUserContext from '../../../hooks/useUserContext';
+import useUserContext from '../../../common/useUserContext';
 
 const DesktopContainer = ({ children }) => {
     const router = useRouter();
@@ -65,7 +65,9 @@ const DesktopContainer = ({ children }) => {
                             <Menu.Item position="right">
                                 <Link
                                     href={
-                                        isAuthenticated ? '/account' : 'login'
+                                        isAuthenticated
+                                            ? '/account'
+                                            : 'auth/signin'
                                     }
                                 >
                                     {isAuthenticated ? (

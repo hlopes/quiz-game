@@ -23,4 +23,8 @@ export default {
         errorCode: 105,
         message: 'Invalid email',
     },
+    ERROR_REGISTERING: {
+        errorCode: 106,
+        message: 'Error registering user',
+    },
 };

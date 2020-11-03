@@ -18,10 +18,10 @@ import {
     NOTIFICATION_CATEGORIES,
     useNotificationContext,
     withNotificationProvider,
-} from '../../hooks/useNotificationsContext';
-import useUserContext from '../../hooks/useUserContext';
-import withGuest from '../../hooks/withGuest';
-import useRegister from '../../hooks/useRegister';
+} from '../../common/useNotificationsContext';
+import useUserContext from '../../common/useUserContext';
+import withGuest from '../../common/withGuest';
+import useRegister from '../../common/useRegister';
 import Layout from '../../components/layout/Layout';
 
 import styles from './Register.module.css';

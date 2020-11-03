@@ -14,14 +14,14 @@ import {
     Header,
 } from 'semantic-ui-react';
 
-import withAuth from '../../hooks/withAuth';
-import useQuestions from '../../hooks/useQuestions';
+import withAuth from '../../common/withAuth';
+import useQuestions from '../../common/useQuestions';
 import Layout from '../../components/layout/Layout';
 import Question from '../../components/question/Question';
 
-import useSetScore from '../../hooks/useSetScore';
+import useSetScore from '../../common/useSetScore';
 
-import useUserContext from '../../hooks/useUserContext';
+import useUserContext from '../../common/useUserContext';
 
 import styles from './Game.module.css';
 

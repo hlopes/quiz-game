@@ -21,10 +21,10 @@ import {
     withNotificationProvider,
     useNotificationContext,
     NOTIFICATION_CATEGORIES,
-} from '../../hooks/useNotificationsContext';
-import withGuest from '../../hooks/withGuest';
-import useLogin from '../../hooks/useLogin';
-import useUserContext from '../../hooks/useUserContext';
+} from '../../common/useNotificationsContext';
+import withGuest from '../../common/withGuest';
+import useLogin from '../../common/useLogin';
+import useUserContext from '../../common/useUserContext';
 import Layout from '../../components/layout/Layout';
 
 import styles from './Login.module.css';

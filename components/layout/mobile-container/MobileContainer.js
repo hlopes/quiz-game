@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 import { Media } from '../../media/Media';
 
-import useUserContext from '../../../hooks/useUserContext';
+import useUserContext from '../../../common/useUserContext';
 
 import styles from './MobileContainer.module.css';
 
@@ -45,9 +45,9 @@ const MobileContainer = ({ children }) => {
                             New Game
                         </Menu.Item>
                     </Link>
-                    <Link href={isAuthenticated ? '/account' : '/login'}>
+                    <Link href={isAuthenticated ? '/account' : '/auth/signin'}>
                         <Menu.Item
-                            active={['/account', '/login'].includes(
+                            active={['/account', '/auth/signin'].includes(
                                 router?.pathname
                             )}
                         >

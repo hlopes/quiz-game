@@ -5,8 +5,8 @@ import { connectToDatabase } from '../../utils/mongodb';
 import errors from '../../utils/errors';
 
 const handler = async (req, res) => {
-    const { name, email, password } = JSON.parse(req.body);
-
+    const { name, email, password, image, isExternal } = JSON.parse(req.body);
+    console.log('### isExternal ', isExternal);
     if (!name || !email || !password) {
         res.statusCode = 422;
 
@@ -18,16 +18,16 @@ const handler = async (req, res) => {
 
         const savedUser = await db.collection('users').findOne({ email });
 
-        if (savedUser) {
-            res.statusCode = 422;
-
-            return res.json({ ...errors.ALREADY_REGISTERED });
-        }
-
         if (!process.env.JWT_SECRET) {
             res.statusCode = 422;
 
             return res.json({ ...errors.SECRET_NOT_DEFINED });
+        }
+
+        if (savedUser && !isExternal) {
+            res.statusCode = 422;
+
+            return res.json({ ...errors.ALREADY_REGISTERED });
         }
 
         const hashed = await bcrypt.hash(password, 12);
@@ -37,9 +37,19 @@ const handler = async (req, res) => {
                 email,
                 name,
                 password: hashed,
+                image,
+                points: 0,
+                questionsAnswered: 0,
+                score: 0,
             };
 
-            await db.collection('users').insertOne(user);
+            if (savedUser) {
+                await db
+                    .collection('users')
+                    .updateOne({ email }, { $set: { password } });
+            } else {
+                await db.collection('users').insertOne(user);
+            }
 
             const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
 
@@ -52,8 +62,10 @@ const handler = async (req, res) => {
             });
         }
     } catch (error) {
-        console.log('Error ', error);
+        res.statusCode = 500;
+
+        return res.json({ ...errors.ERROR_REGISTERING });
     }
 };
 
-export default connectToDatabase(handler);
+export default handler;

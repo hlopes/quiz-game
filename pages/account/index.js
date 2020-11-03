@@ -1,6 +1,6 @@
 import React from 'react';
 
-import withAuth from '../../hooks/withAuth';
+import withAuth from '../../common/withAuth';
 import Layout from '../../components/layout/Layout';
 
 const Account = () => {

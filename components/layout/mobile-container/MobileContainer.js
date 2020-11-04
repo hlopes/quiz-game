@@ -45,9 +45,9 @@ const MobileContainer = ({ children }) => {
                             New Game
                         </Menu.Item>
                     </Link>
-                    <Link href={isAuthenticated ? '/account' : '/auth/signin'}>
+                    <Link href={isAuthenticated ? '/account' : '/signin'}>
                         <Menu.Item
-                            active={['/account', '/auth/signin'].includes(
+                            active={['/account', '/signin'].includes(
                                 router?.pathname
                             )}
                         >

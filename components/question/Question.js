@@ -46,7 +46,6 @@ const Question = ({ question, onAnswerSelection }) => {
 
         const selectedProps = isAnswerSelected
             ? {
-                  basic: true,
                   color: 'blue',
               }
             : {};

@@ -6,7 +6,7 @@ import errors from '../../utils/errors';
 
 const handler = async (req, res) => {
     const { name, email, password, image, isExternal } = JSON.parse(req.body);
-    console.log('### isExternal ', isExternal);
+
     if (!name || !email || !password) {
         res.statusCode = 422;
 

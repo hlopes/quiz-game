@@ -9,9 +9,10 @@ import {
     Segment,
 } from 'semantic-ui-react';
 import { ToastContainer } from 'react-toastify';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { compose } from 'recompose';
+
+import { useRouter } from 'next/router';
 
 import { EMAIL_REGEX } from '../../utils/regexes';
 import {

@@ -74,7 +74,7 @@ const Game = () => {
 
             setDisplayScore(true);
         },
-        [email, getQuestionsData?.results?.length, score, setScoreAPI]
+        [email, getQuestionsData?.results?.length, setScoreAPI]
     );
 
     const handleNext = useCallback(

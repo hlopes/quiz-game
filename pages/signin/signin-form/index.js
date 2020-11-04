@@ -13,9 +13,8 @@ import {
 } from '../../../common/useNotificationsContext';
 import useLogin from '../../../common/useLogin';
 import useUserContext from '../../../common/useUserContext';
-import withGuest from '../../../common/withGuest';
 
-import styles from '../../login/Login.module.css';
+import styles from '../Signin.module.css';
 
 const SigninForm = () => {
     const router = useRouter();
@@ -121,6 +120,6 @@ const SigninForm = () => {
 
 SigninForm.propTypes = {};
 
-const enhanced = compose(withGuest, withNotificationProvider);
+const enhanced = compose(withNotificationProvider);
 
 export default enhanced(SigninForm);

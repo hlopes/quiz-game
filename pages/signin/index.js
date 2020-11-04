@@ -1,18 +1,27 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Grid, Header as HeaderSem, Message } from 'semantic-ui-react';
+import {
+    Button,
+    Dimmer,
+    Grid,
+    Header as HeaderSem,
+    Loader,
+    Message,
+} from 'semantic-ui-react';
 import { ToastContainer } from 'react-toastify';
 
 import Link from 'next/link';
-import { providers, signIn } from 'next-auth/client';
+import { providers, signIn, useSession } from 'next-auth/client';
 
 import Layout from '../../components/layout/Layout';
 
-import styles from '../login/Login.module.css';
-
 import SigninForm from './signin-form';
 
-function Signin({ providers }) {
+import styles from './Signin.module.css';
+
+function Index({ providers }) {
+    const [loading] = useSession();
+
     const handleSignInProvider = useCallback(
         (provider) => () => {
             signIn(provider);
@@ -22,6 +31,11 @@ function Signin({ providers }) {
 
     return (
         <Layout>
+            {loading && (
+                <Dimmer active inverted>
+                    <Loader size="big">Loading</Loader>
+                </Dimmer>
+            )}
             <ToastContainer bodyClassName={styles.toastBody} hideProgressBar />
             <Grid
                 className={styles.form}
@@ -41,31 +55,20 @@ function Signin({ providers }) {
                         <Message>
                             New to us? <Link href={'/register'}>Sign Up</Link>
                         </Message>
-                    </Grid.Column>
-                    <Grid.Column
-                        width={5}
-                        only="tablet computer large screen widescreen"
-                    />
-                </Grid.Row>
-                <Grid.Row>
-                    <Grid.Column
-                        width={5}
-                        only="tablet computer large screen widescreen"
-                    />
-                    <Grid.Column mobile={16} tablet={8} computer={6}>
                         {providers
-                            ? Object.values(providers).map((provider) => (
-                                  <div key={provider.name}>
-                                      <Button
-                                          primary
-                                          onClick={handleSignInProvider(
-                                              provider.id
-                                          )}
-                                          size="big"
-                                      >
-                                          Sign in with {provider.name}
-                                      </Button>
-                                  </div>
+                            ? Object.values(
+                                  providers
+                              ).map((provider, index) => (
+                                  <Button
+                                      key={index}
+                                      circular
+                                      color={provider.id}
+                                      icon={provider.id}
+                                      onClick={handleSignInProvider(
+                                          provider.id
+                                      )}
+                                      size={'big'}
+                                  />
                               ))
                             : null}
                     </Grid.Column>
@@ -79,14 +82,14 @@ function Signin({ providers }) {
     );
 }
 
-Signin.propTypes = {
+Index.propTypes = {
     providers: PropTypes.object,
 };
 
-Signin.getInitialProps = async (context) => {
+Index.getInitialProps = async (context) => {
     return {
         providers: await providers(context),
     };
 };
 
-export default Signin;
+export default Index;

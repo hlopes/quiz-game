@@ -65,9 +65,7 @@ const DesktopContainer = ({ children }) => {
                             <Menu.Item position="right">
                                 <Link
                                     href={
-                                        isAuthenticated
-                                            ? '/account'
-                                            : 'auth/signin'
+                                        isAuthenticated ? '/account' : '/signin'
                                     }
                                 >
                                     {isAuthenticated ? (

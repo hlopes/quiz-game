@@ -5,9 +5,11 @@ import React, {
     useEffect,
     useMemo,
     useCallback,
+    useState,
 } from 'react';
 import PropTypes from 'prop-types';
-import { useSession } from 'next-auth/client';
+import { useSession, signout } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import useRegister from '../common/useRegister';
 
@@ -24,18 +26,27 @@ const reducer = (state, action) => {
 export const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
-    const [session, loading] = useSession();
+    const [isExternalRegistered, setIsExternalRegistered] = useState(false);
 
-    const [registerUser, { isLoading, data, error }] = useRegister();
+    const router = useRouter();
+    const [session] = useSession();
+
+    const [registerUser] = useRegister();
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const isAuthenticated = useMemo(() => !!state?.email, [state]);
 
     const logout = useCallback(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+
         localStorage.removeItem('user');
 
         dispatch({ type: 'USER', payload: null });
+
+        if (user.isExternal) {
+            signout();
+        }
     }, [dispatch]);
 
     useEffect(() => {
@@ -49,10 +60,9 @@ export const UserContextProvider = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        console.log('### session ', session);
         async function registerExternalUser() {
-            if (session) {
-                await registerUser({
+            if (session && !isExternalRegistered) {
+                return await registerUser({
                     name: session.user.name,
                     username: session.user.email,
                     password: session.accessToken,
@@ -62,10 +72,27 @@ export const UserContextProvider = ({ children }) => {
             }
         }
 
-        registerExternalUser().then(() =>
-            console.log('### external user registered ')
-        );
-    }, [registerUser, session]);
+        registerExternalUser().then((data) => {
+            if (data) {
+                localStorage.setItem('jwt', data.token);
+                localStorage.setItem(
+                    'user',
+                    JSON.stringify({ ...data.user, isExternal: true })
+                );
+
+                dispatch({
+                    type: 'USER',
+                    payload: { ...data.user, isExternal: true },
+                });
+
+                if (router.pathname !== '/') {
+                    router.push('/');
+                }
+
+                setIsExternalRegistered(true);
+            }
+        });
+    }, [registerUser, router, session, isExternalRegistered]);
 
     return (
         <UserContext.Provider

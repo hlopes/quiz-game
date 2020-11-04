@@ -189,8 +189,10 @@ const Game = () => {
                                     </Label>
                                 </Card.Description>
                             )}
-                            <Card.Header>
-                                {he.decode(currentQuestion?.question)}
+                            <Card.Header className={styles.question}>
+                                <Header as="h2">
+                                    {he.decode(currentQuestion?.question)}
+                                </Header>
                             </Card.Header>
                             <Card.Description>
                                 {currentQuestion?.category}

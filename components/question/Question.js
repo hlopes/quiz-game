@@ -2,9 +2,11 @@ import React, { useState, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import he from 'he';
 import isEmpty from 'lodash/isEmpty';
+import classnames from 'classnames';
 
 import { Button } from 'semantic-ui-react';
 
+import useBreakpoints from '../../common/useBreakpoints';
 import shuffle from '../../utils/shuffle';
 
 import styles from './Question.module.css';
@@ -15,6 +17,7 @@ const questionTypes = {
 };
 
 const Question = ({ question, onAnswerSelection }) => {
+    const { isExtraSmall } = useBreakpoints();
     const [selectedAnswer, setSelectedAnswer] = useState(null);
 
     const handleAnswerSelection = useCallback(
@@ -51,8 +54,15 @@ const Question = ({ question, onAnswerSelection }) => {
             : {};
 
         return (
-            <div key={index} className={styles.button}>
+            <div
+                key={index}
+                className={classnames(styles.button, {
+                    [styles.mobile]: isExtraSmall,
+                })}
+            >
                 <Button
+                    id={`question-${index}`}
+                    className={styles.button}
                     size="large"
                     onClick={handleAnswerSelection(answer)}
                     {...selectedProps}

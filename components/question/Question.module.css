@@ -1,3 +1,7 @@
-.button {
+.mobile {
+    display: inline;
+}
+
+.button[id^=question] {
     margin-bottom: 0.5rem;
 }

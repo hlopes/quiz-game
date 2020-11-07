@@ -1,0 +1,12 @@
+.userWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.user {
+    max-width: 58rem;
+}
+
+.statistics {
+    justify-content: center;
+}

@@ -8,12 +8,15 @@ import {
     List,
     Segment,
     Statistic,
+    Icon,
 } from 'semantic-ui-react';
 
 import useBreakpoints from '../../common/useBreakpoints';
 import withAuth from '../../common/withAuth';
 import Layout from '../../components/layout/Layout';
 import useUserContext from '../../common/useUserContext';
+
+import styles from './Account.module.css';
 
 const Account = () => {
     const { user } = useUserContext();
@@ -25,33 +28,42 @@ const Account = () => {
 
     return (
         <Layout>
-            <Segment
-                raised
-                padded="very"
-                compact
-                style={{ backgroundColor: '#fff', margin: '0 auto' }}
-            >
-                <Item>
-                    <Item.Image size="tiny" src={userImage} circular />
-                    <Item.Content verticalAlign="middle">
-                        <List>
-                            <List.Item>
-                                <List.Icon name="user circle" />
-                                <List.Content>{user.name}</List.Content>
-                            </List.Item>
-                            <List.Item>
-                                <List.Icon name="mail" />
-                                <List.Content>{user.email}</List.Content>
-                            </List.Item>
-                        </List>
-                    </Item.Content>
-                </Item>
+            <Segment raised padded={lteSmall ? true : 'very'}>
+                <Item.Group className={styles.userWrapper}>
+                    <Item className={styles.user}>
+                        <Item.Image size="tiny" src={userImage} circular />
+                        <Item.Content verticalAlign="middle">
+                            <List>
+                                <List.Item>
+                                    <Icon name="user circle" />
+                                    {user.name}
+                                </List.Item>
+                                <List.Item>
+                                    <Icon name="mail" />
+                                    {user.email}
+                                </List.Item>
+                            </List>
+                        </Item.Content>
+                    </Item>
+                </Item.Group>
                 <Divider />
-                <Statistic.Group size={lteSmall ? 'mini' : 'medium'}>
-                    <Statistic label="Score" value={`${user.score}%`} />
-                    <Statistic label="Correct" value={user.points} />
+                <Statistic.Group
+                    className={styles.statistics}
+                    size={lteSmall ? 'mini' : 'small'}
+                >
+                    <Statistic
+                        label="Score"
+                        color="yellow"
+                        value={`${user.score}%`}
+                    />
+                    <Statistic
+                        label="Correct"
+                        color="olive"
+                        value={user.points}
+                    />
                     <Statistic
                         label="Questions"
+                        color="teal"
                         value={user.questionsAnswered}
                     />
                 </Statistic.Group>

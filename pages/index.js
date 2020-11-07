@@ -4,9 +4,9 @@ import {
     Grid,
     Header,
     Segment,
-    Divider,
     Table,
     Image,
+    Divider,
 } from 'semantic-ui-react';
 
 import getRandomAvatar from '../utils/randomAvatar';
@@ -16,37 +16,26 @@ import Layout from '../components/layout/Layout';
 const Home = ({ top }) => {
     return (
         <Layout>
-            <Segment vertical inverted>
-                <Grid container stackable verticalAlign="middle" centered>
-                    <Grid.Row>
-                        <Grid.Column
-                            mobile={16}
-                            tablet={8}
-                            computer={6}
-                            textAlign="center"
-                        >
-                            <Header as="h3" inverted>
-                                Welcome to Quiz Game
-                            </Header>
-                            <p>This is just a show case game using NextJS.</p>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Segment>
-            <Divider />
-            <Segment vertical>
+            <Segment
+                raised
+                padded="very"
+                compact
+                style={{ backgroundColor: '#fff', margin: '0 auto' }}
+            >
+                <Header as="h3">Welcome to Quiz Game</Header>
+                <p>This is just a show case game using NextJS.</p>
+                <br />
+                <Divider />
                 <Grid celled="internally" columns="equal" stackable centered>
                     <Grid.Row>
                         <Grid.Column textAlign="center">
-                            <Header as="h3" inverted>
-                                Top 10
-                            </Header>
+                            <Header as="h3">Top 10</Header>
                             <Table
                                 basic="very"
                                 celled
                                 collapsing
-                                inverted
                                 unstackable
+                                striped
                             >
                                 <Table.Header>
                                     <Table.Row>
@@ -56,13 +45,19 @@ const Home = ({ top }) => {
                                         <Table.HeaderCell>
                                             Score
                                         </Table.HeaderCell>
+                                        <Table.HeaderCell>
+                                            Correct
+                                        </Table.HeaderCell>
+                                        <Table.HeaderCell>
+                                            Questions
+                                        </Table.HeaderCell>
                                     </Table.Row>
                                 </Table.Header>
                                 <Table.Body>
                                     {top?.map((player, index) => (
                                         <Table.Row key={index}>
                                             <Table.Cell>
-                                                <Header as="h4" image inverted>
+                                                <Header as="h4" image>
                                                     {player.image ? (
                                                         <Image
                                                             src={player.image}
@@ -81,8 +76,14 @@ const Home = ({ top }) => {
                                                     </Header.Content>
                                                 </Header>
                                             </Table.Cell>
-                                            <Table.Cell>
+                                            <Table.Cell textAlign="center">
                                                 {player.score}%
+                                            </Table.Cell>
+                                            <Table.Cell textAlign="right">
+                                                {player.points}
+                                            </Table.Cell>
+                                            <Table.Cell textAlign="right">
+                                                {player.questionsAnswered}
                                             </Table.Cell>
                                         </Table.Row>
                                     ))}

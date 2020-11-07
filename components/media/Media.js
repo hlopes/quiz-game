@@ -13,4 +13,4 @@ const AppMedia = createMedia({
 // Generate CSS to be injected into the head
 export const mediaStyle = AppMedia.createMediaStyle();
 
-export const { Media, MediaContextProvider } = AppMedia;
+export const { Media, MediaContextProvider, findBreakpointAtWidth } = AppMedia;

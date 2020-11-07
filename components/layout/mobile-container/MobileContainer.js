@@ -30,7 +30,6 @@ const MobileContainer = ({ children }) => {
                 <Sidebar
                     as={Menu}
                     animation="overlay"
-                    inverted
                     onHide={handleSidebarHide}
                     vertical
                     visible={isSidebarOpened}
@@ -89,13 +88,19 @@ const MobileContainer = ({ children }) => {
                 </Sidebar>
                 <Sidebar.Pusher dimmed={isSidebarOpened}>
                     <Segment
-                        inverted
                         textAlign="center"
                         style={{ minHeight: '100vh' }}
                         vertical
                     >
                         <Container>
-                            <Menu inverted pointing secondary size="large">
+                            <Menu
+                                pointing
+                                secondary
+                                size="large"
+                                style={{
+                                    backgroundColor: '#fff',
+                                }}
+                            >
                                 <Menu.Item onClick={handleToggle}>
                                     <Icon name="sidebar" />
                                 </Menu.Item>

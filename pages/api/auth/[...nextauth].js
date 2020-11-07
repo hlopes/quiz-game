@@ -16,18 +16,18 @@ const options = {
             clientId: process.env.NEXTAUTH_GOOGLE_ID,
             clientSecret: process.env.NEXTAUTH_GOOGLE_SECRET,
         }),
-        // Providers.Facebook({
-        //     clientId: process.env.NEXTAUTH_FACEBOOK_ID,
-        //     clientSecret: process.env.NEXTAUTH_FACEBOOK_SECRET,
-        // }),
+        Providers.Facebook({
+            clientId: process.env.NEXTAUTH_FACEBOOK_ID,
+            clientSecret: process.env.NEXTAUTH_FACEBOOK_SECRET,
+        }),
         // Providers.Twitter({
         //     clientId: process.env.NEXTAUTH_TWITTER_ID,
         //     clientSecret: process.env.NEXTAUTH_TWITTER_SECRET,
         // }),
-        // Providers.GitHub({
-        //     clientId: process.env.NEXTAUTH_GITHUB_ID,
-        //     clientSecret: process.env.NEXTAUTH_GITHUB_SECRET,
-        // }),
+        Providers.GitHub({
+            clientId: process.env.NEXTAUTH_GITHUB_ID,
+            clientSecret: process.env.NEXTAUTH_GITHUB_SECRET,
+        }),
     ],
 
     // @link https://next-auth.js.org/configuration/databases

@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import {
     Button,
     Dimmer,
+    Form,
     Grid,
     Header as HeaderSem,
     Loader,
     Message,
+    Segment,
 } from 'semantic-ui-react';
 import { ToastContainer } from 'react-toastify';
 
@@ -48,29 +50,31 @@ function Index({ providers }) {
                         only="tablet computer large screen widescreen"
                     />
                     <Grid.Column mobile={16} tablet={8} computer={6}>
-                        <HeaderSem as="h2" textAlign="center" inverted>
-                            Welcome Back
-                        </HeaderSem>
-                        <SigninForm />
-                        <Message>
-                            New to us? <Link href={'/register'}>Sign Up</Link>
-                        </Message>
-                        {providers
-                            ? Object.values(
-                                  providers
-                              ).map((provider, index) => (
-                                  <Button
-                                      key={index}
-                                      circular
-                                      color={provider.id}
-                                      icon={provider.id}
-                                      onClick={handleSignInProvider(
-                                          provider.id
-                                      )}
-                                      size={'big'}
-                                  />
-                              ))
-                            : null}
+                        <Segment stacked raised padded="very">
+                            <HeaderSem as="h2" textAlign="center">
+                                Welcome Back
+                            </HeaderSem>
+                            <SigninForm />
+                            <Message>
+                                New to us?{' '}
+                                <Link href={'/register'}>Sign Up</Link>
+                            </Message>
+                            {providers
+                                ? Object.values(
+                                      providers
+                                  ).map((provider, index) => (
+                                      <Button
+                                          key={index}
+                                          circular
+                                          icon={provider.id}
+                                          onClick={handleSignInProvider(
+                                              provider.id
+                                          )}
+                                          size={'big'}
+                                      />
+                                  ))
+                                : null}
+                        </Segment>
                     </Grid.Column>
                     <Grid.Column
                         width={5}

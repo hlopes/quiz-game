@@ -7,16 +7,16 @@ export default function withGuest(Component) {
     return function WithGuestComponent(props) {
         const router = useRouter();
 
-        const { state } = useUserContext();
+        const { user } = useUserContext();
 
         useEffect(() => {
-            if (state?.email) {
+            if (user?.email) {
                 router.push('/');
             }
 
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [state]);
+        }, [user]);
 
-        return state?.email ? null : <Component {...props} />;
+        return user?.email ? null : <Component {...props} />;
     };
 }

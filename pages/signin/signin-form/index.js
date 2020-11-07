@@ -18,7 +18,7 @@ import styles from '../Signin.module.css';
 
 const SigninForm = () => {
     const router = useRouter();
-    const { dispatch } = useUserContext();
+    const { setUser } = useUserContext();
     const { add, clear } = useNotificationContext();
     const { handleSubmit, register, errors, setValue, getValues } = useForm();
 
@@ -32,11 +32,11 @@ const SigninForm = () => {
             localStorage.setItem('jwt', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            dispatch({ type: 'USER', payload: data.user });
+            setUser(data.user);
 
             router.push('/');
         }
-    }, [data, router, dispatch]);
+    }, [data, router, setUser]);
 
     const changeValue = useCallback(
         (e, { name, value }) => {
@@ -84,36 +84,34 @@ const SigninForm = () => {
                     <Loader size="big">Loading</Loader>
                 </Dimmer>
             )}
-            <Segment stacked>
-                <Form.Input
-                    name="username"
-                    fluid
-                    icon="user"
-                    iconPosition="left"
-                    placeholder="Username/E-mail"
-                    onChange={changeValue}
-                    error={!!errors.username}
-                />
-                <p className={styles.error}>
-                    {errors.username && errors.username.message}
-                </p>
-                <Form.Input
-                    name="password"
-                    fluid
-                    icon="lock"
-                    iconPosition="left"
-                    placeholder="Password"
-                    type="password"
-                    onChange={changeValue}
-                    error={!!errors.password}
-                />
-                <p className={styles.error}>
-                    {errors.password && errors.password.message}
-                </p>
-                <Button primary fluid size="huge">
-                    Login
-                </Button>
-            </Segment>
+            <Form.Input
+                name="username"
+                fluid
+                icon="user"
+                iconPosition="left"
+                placeholder="Username/E-mail"
+                onChange={changeValue}
+                error={!!errors.username}
+            />
+            <p className={styles.error}>
+                {errors.username && errors.username.message}
+            </p>
+            <Form.Input
+                name="password"
+                fluid
+                icon="lock"
+                iconPosition="left"
+                placeholder="Password"
+                type="password"
+                onChange={changeValue}
+                error={!!errors.password}
+            />
+            <p className={styles.error}>
+                {errors.password && errors.password.message}
+            </p>
+            <Button primary fluid size="huge">
+                Login
+            </Button>
         </Form>
     );
 };

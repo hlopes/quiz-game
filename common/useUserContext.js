@@ -37,6 +37,13 @@ export const UserContextProvider = ({ children }) => {
 
     const isAuthenticated = useMemo(() => !!state?.email, [state]);
 
+    const setUser = useCallback(
+        (user) => {
+            dispatch({ type: 'USER', payload: user });
+        },
+        [dispatch]
+    );
+
     const logout = useCallback(() => {
         const user = JSON.parse(localStorage.getItem('user'));
 
@@ -96,7 +103,7 @@ export const UserContextProvider = ({ children }) => {
 
     return (
         <UserContext.Provider
-            value={{ state, dispatch, isAuthenticated, logout }}
+            value={{ user: state, setUser, isAuthenticated, logout }}
         >
             {children}
         </UserContext.Provider>

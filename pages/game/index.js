@@ -12,8 +12,10 @@ import {
     Statistic,
     Rating,
     Header,
+    Image,
 } from 'semantic-ui-react';
 
+import getQuestionImage from '../../utils/getQuestionImage';
 import withAuth from '../../common/withAuth';
 import useQuestions from '../../common/useQuestions';
 import Layout from '../../components/layout/Layout';
@@ -42,7 +44,7 @@ const questionDifficultyTypes = [
 
 const Game = () => {
     const {
-        state: { email },
+        user: { email },
     } = useUserContext();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -83,11 +85,11 @@ const Game = () => {
                 selectedAnswer === currentQuestion?.correct_answer;
             const currentScore = isCorrect ? score + 1 : score;
 
-            if (!isLast) {
-                if (isCorrect) {
-                    setScore(currentScore);
-                }
+            if (isCorrect) {
+                setScore(currentScore);
+            }
 
+            if (!isLast) {
                 return setCurrentQuestionIndex(
                     Math.min(
                         currentQuestionIndex + 1,
@@ -137,47 +139,42 @@ const Game = () => {
     const isLastQuestion =
         currentQuestionIndex === getQuestionsData?.results?.length - 1;
 
+    const questionImage = getQuestionImage(currentQuestion?.category);
+
     return getQuestionsLoading || !getQuestionsData?.results ? (
         <Dimmer active inverted>
             <Loader size="big">Loading</Loader>
         </Dimmer>
     ) : (
         <Layout>
-            <Grid
-                className={styles.wrapper}
-                textAlign="center"
-                verticalAlign="middle"
-            >
+            <Segment padded style={{ marginTop: '2em' }}>
                 {displayScore ? (
-                    <Segment.Group>
-                        <Segment padded="very" inverted>
-                            <Header as="h2" inverted>
-                                Your Score is
-                            </Header>
-                            <Statistic inverted>
-                                <Statistic.Value>
-                                    {score}/{getQuestionsData?.results?.length}
-                                </Statistic.Value>
-                                <Statistic.Label>
-                                    <Rating
-                                        disabled
-                                        maxRating={5}
-                                        defaultRating={score / 2}
-                                        icon="star"
-                                        size="massive"
-                                    />
-                                </Statistic.Label>
-                            </Statistic>
-                        </Segment>
-                        <Segment inverted>
+                    <>
+                        <Header as="h2">Your Score is</Header>
+                        <Statistic>
+                            <Statistic.Value>
+                                {score}/{getQuestionsData?.results?.length}
+                            </Statistic.Value>
+                            <Statistic.Label>
+                                <Rating
+                                    disabled
+                                    maxRating={5}
+                                    defaultRating={score / 2}
+                                    icon="star"
+                                    size="massive"
+                                />
+                            </Statistic.Label>
+                        </Statistic>
+                        <div>
                             <Button primary onClick={handleReset} size="big">
                                 Try Again?
                             </Button>
-                        </Segment>
-                    </Segment.Group>
+                        </div>
+                    </>
                 ) : (
-                    <Card fluid>
+                    <Card fluid style={{ boxShadow: 'none' }}>
                         <Card.Content>
+                            <Image src={questionImage} size="medium" />
                             {questionDifficultyType && (
                                 <Card.Description className={styles.difficulty}>
                                     <Label
@@ -231,7 +228,7 @@ const Game = () => {
                         </Card.Content>
                     </Card>
                 )}
-            </Grid>
+            </Segment>
         </Layout>
     );
 };

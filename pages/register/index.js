@@ -30,7 +30,7 @@ import styles from './Register.module.css';
 const Register = () => {
     const router = useRouter();
     const { add, clear } = useNotificationContext();
-    const { dispatch } = useUserContext();
+    const { setUser } = useUserContext();
 
     const [registerUser, { isLoading, data, error }] = useRegister();
     const { handleSubmit, register, errors, setValue } = useForm();
@@ -55,11 +55,11 @@ const Register = () => {
             localStorage.setItem('jwt', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
 
-            dispatch({ type: 'USER', payload: data.user });
+            setUser(data.user);
 
             router.push('/');
         }
-    }, [data, router, dispatch]);
+    }, [data, router, setUser]);
 
     useEffect(() => {
         register(

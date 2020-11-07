@@ -7,17 +7,17 @@ import useUserContext from './useUserContext';
 export default function withAuth(Component) {
     return function WithAuthComponent(props) {
         const router = useRouter();
-        const { state } = useUserContext();
+        const { user } = useUserContext();
         const [session, loading] = useSession();
 
         useEffect(() => {
-            if (!state?.email && !session && !loading) {
+            if (!user?.email && !session && !loading) {
                 router.push('/signin');
             }
 
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [state, session, loading]);
+        }, [user, session, loading]);
 
-        return !state?.email ? null : <Component {...props} />;
+        return !user?.email ? null : <Component {...props} />;
     };
 }

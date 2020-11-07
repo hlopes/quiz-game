@@ -33,6 +33,23 @@ const handler = async (req, res) => {
         const hashed = await bcrypt.hash(password, 12);
 
         if (hashed) {
+            if (savedUser) {
+                await db
+                    .collection('users')
+                    .updateOne({ email }, { $set: { password } });
+
+                const token = jwt.sign(
+                    { _id: savedUser._id },
+                    process.env.JWT_SECRET
+                );
+
+                return res.json({
+                    message: 'Saved successfully',
+                    user: savedUser,
+                    token,
+                });
+            }
+
             const user = {
                 email,
                 name,
@@ -43,13 +60,7 @@ const handler = async (req, res) => {
                 score: 0,
             };
 
-            if (savedUser) {
-                await db
-                    .collection('users')
-                    .updateOne({ email }, { $set: { password } });
-            } else {
-                await db.collection('users').insertOne(user);
-            }
+            await db.collection('users').insertOne(user);
 
             const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
 

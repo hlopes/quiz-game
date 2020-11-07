@@ -10,6 +10,7 @@ import '../styles/globals.css';
 
 import ErrorBoundary from '../components/error-boundary/ErrorBoundary';
 import { UserContextProvider } from '../common/useUserContext';
+import { HydrationRenderProvider } from '../common/useHydrationRender';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -18,11 +19,13 @@ function App({ Component, pageProps }) {
 
     return (
         <ErrorBoundary>
-            <AuthProvider session={session}>
-                <UserContextProvider>
-                    <Component {...pageProps} />
-                </UserContextProvider>
-            </AuthProvider>
+            <HydrationRenderProvider>
+                <AuthProvider session={session}>
+                    <UserContextProvider>
+                        <Component {...pageProps} />
+                    </UserContextProvider>
+                </AuthProvider>
+            </HydrationRenderProvider>
             {isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
         </ErrorBoundary>
     );

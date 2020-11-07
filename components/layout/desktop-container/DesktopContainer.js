@@ -31,17 +31,21 @@ const DesktopContainer = ({ children }) => {
                 onBottomPassedReverse={hideFixedMenu}
             >
                 <Segment
-                    inverted
                     textAlign="center"
-                    style={{ minHeight: '100vh', padding: '1em 0em' }}
+                    style={{
+                        minHeight: '100vh',
+                        padding: 0,
+                    }}
                     vertical
                 >
                     <Menu
                         fixed={isFixed ? 'top' : null}
-                        inverted={!isFixed}
                         pointing={!isFixed}
                         secondary={!isFixed}
                         size="large"
+                        style={{
+                            backgroundColor: '#fff',
+                        }}
                     >
                         <Container>
                             <Link href={'/'}>
@@ -61,7 +65,6 @@ const DesktopContainer = ({ children }) => {
                                     </Menu.Item>
                                 </Link>
                             )}
-
                             <Menu.Item position="right">
                                 <Link
                                     href={
@@ -69,12 +72,12 @@ const DesktopContainer = ({ children }) => {
                                     }
                                 >
                                     {isAuthenticated ? (
-                                        <Button inverted={!isFixed}>
+                                        <Button>
                                             <Icon name="user" />
                                             Account
                                         </Button>
                                     ) : (
-                                        <Button inverted={!isFixed}>
+                                        <Button>
                                             <Icon name="user outline" />
                                             Login
                                         </Button>
@@ -83,7 +86,6 @@ const DesktopContainer = ({ children }) => {
                                 {!isAuthenticated && (
                                     <Link href={'/register'}>
                                         <Button
-                                            inverted={!isFixed}
                                             primary={isFixed}
                                             style={{ marginLeft: '0.5em' }}
                                         >
@@ -95,7 +97,6 @@ const DesktopContainer = ({ children }) => {
                                 {isAuthenticated && (
                                     <Button
                                         onClick={logout}
-                                        inverted={!isFixed}
                                         primary={isFixed}
                                         style={{ marginLeft: '0.5em' }}
                                     >

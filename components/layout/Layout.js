@@ -6,10 +6,10 @@ import Header from '../header/Header';
 import ResponsiveContainer from './responsive-container/ResponsiveContainer';
 
 const Layout = ({ children }) => (
-    <>
+    <div className="background">
         <Header />
         <ResponsiveContainer>{children}</ResponsiveContainer>
-    </>
+    </div>
 );
 
 Layout.propTypes = {

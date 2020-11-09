@@ -50,14 +50,14 @@ function Index({ providers }) {
                         only="tablet computer large screen widescreen"
                     />
                     <Grid.Column mobile={16} tablet={8} computer={6}>
-                        <Segment stacked raised padded="very">
+                        <Segment raised padded="very">
                             <HeaderSem as="h2" textAlign="center">
-                                Welcome Back
+                                Welcome back
                             </HeaderSem>
                             <SigninForm />
                             <Message>
-                                New to us?{' '}
-                                <Link href={'/register'}>Sign Up</Link>
+                                New player?{' '}
+                                <Link href={'/register'}>Register</Link>
                             </Message>
                             {providers
                                 ? Object.values(

@@ -18,6 +18,12 @@ export default function withAuth(Component) {
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, [user, session, loading]);
 
-        return !user?.email ? null : <Component {...props} />;
+        return !user?.email ? (
+            <noscript>
+                <p>JS is disabled?</p>
+            </noscript>
+        ) : (
+            <Component {...props} />
+        );
     };
 }

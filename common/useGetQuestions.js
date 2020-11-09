@@ -1,15 +1,16 @@
 import { useQuery } from 'react-query';
 
-const useQuestions = () => {
+const useGetQuestions = (num) => {
     const fetchQuestions = async () => {
-        const result = await fetch('https://opentdb.com/api.php?amount=3');
+        const result = await fetch(`https://opentdb.com/api.php?amount=${num}`);
 
         return result.json();
     };
 
     return useQuery('questions', fetchQuestions, {
         refetchOnWindowFocus: false,
+        enabled: false,
     });
 };
 
-export default useQuestions;
+export default useGetQuestions;

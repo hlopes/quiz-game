@@ -10,3 +10,11 @@
 .statistics {
     justify-content: center;
 }
+
+.toastBody {
+    color: white;
+}
+
+.selectedGender {
+    border: 0.2rem solid darkblue;
+}

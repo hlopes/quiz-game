@@ -11,7 +11,6 @@ import {
 import { ToastContainer } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { compose } from 'recompose';
-
 import { useRouter } from 'next/router';
 
 import { EMAIL_REGEX } from '../../utils/regexes';
@@ -118,11 +117,11 @@ const Register = () => {
                         only="tablet computer large screen widescreen"
                     />
                     <Grid.Column mobile={16} tablet={8} computer={6}>
-                        <HeaderSem as="h2" textAlign="center" inverted>
-                            New Player
-                        </HeaderSem>
-                        <Form size="large" onSubmit={handleSubmit(submit)}>
-                            <Segment stacked>
+                        <Segment raised padded="very">
+                            <HeaderSem as="h2" textAlign="center">
+                                New Player
+                            </HeaderSem>
+                            <Form size="large" onSubmit={handleSubmit(submit)}>
                                 <Form.Input
                                     name="name"
                                     fluid
@@ -159,8 +158,8 @@ const Register = () => {
                                 <Button primary fluid size="huge">
                                     Register
                                 </Button>
-                            </Segment>
-                        </Form>
+                            </Form>
+                        </Segment>
                     </Grid.Column>
                     <Grid.Column
                         width={5}

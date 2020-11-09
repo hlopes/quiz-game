@@ -82,9 +82,31 @@ export const UserContextProvider = ({ children }) => {
         registerExternalUser().then((data) => {
             if (data) {
                 localStorage.setItem('jwt', data.token);
+
+                // Remove password
+                const {
+                    email,
+                    image,
+                    isExternal,
+                    name,
+                    points,
+                    score,
+                    questionsAnswered,
+                    _id,
+                } = data.user;
+
                 localStorage.setItem(
                     'user',
-                    JSON.stringify({ ...data.user, isExternal: true })
+                    JSON.stringify({
+                        email,
+                        image,
+                        isExternal,
+                        name,
+                        points,
+                        score,
+                        questionsAnswered,
+                        _id,
+                    })
                 );
 
                 dispatch({

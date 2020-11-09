@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    Grid,
+    Label,
     Header,
     Segment,
     Table,
@@ -30,7 +30,6 @@ const Home = ({ top }) => {
                         <Table.Row>
                             <Table.HeaderCell>Player</Table.HeaderCell>
                             <Table.HeaderCell>Score</Table.HeaderCell>
-                            <Table.HeaderCell>Correct</Table.HeaderCell>
                             <Table.HeaderCell>Questions</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
@@ -55,11 +54,16 @@ const Home = ({ top }) => {
                                         {player.name}
                                     </Header>
                                 </Table.Cell>
-                                <Table.Cell textAlign="center">
-                                    {player.score}%
-                                </Table.Cell>
                                 <Table.Cell textAlign="right">
-                                    {player.points}
+                                    {player.points > 0 ? (
+                                        <Label color="green">
+                                            {player.points}
+                                        </Label>
+                                    ) : (
+                                        <Label color="yellow">
+                                            {player.points}
+                                        </Label>
+                                    )}
                                 </Table.Cell>
                                 <Table.Cell textAlign="right">
                                     {player.questionsAnswered}

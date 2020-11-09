@@ -37,9 +37,21 @@ const handler = async (req, res) => {
                 { _id: savedUser._id },
                 process.env.JWT_SECRET
             );
-            const { _id, name, email } = savedUser;
 
-            return res.json({ token, user: { _id, name, email } });
+            // remove password
+            const {
+                _id,
+                name,
+                email,
+                score,
+                points,
+                questionsAnswered,
+            } = savedUser;
+
+            return res.json({
+                token,
+                user: { _id, name, email, score, points, questionsAnswered },
+            });
         }
 
         res.statusCode = 422;

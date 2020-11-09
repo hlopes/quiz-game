@@ -1,33 +1,94 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { compose } from 'recompose';
 import {
     Button,
     Divider,
     Item,
     Form,
-    Input,
     List,
     Segment,
     Statistic,
     Icon,
 } from 'semantic-ui-react';
+import { useForm } from 'react-hook-form';
+import { ToastContainer } from 'react-toastify';
 
+import {
+    NOTIFICATION_CATEGORIES,
+    useNotificationContext,
+    withNotificationProvider,
+} from '../../common/useNotificationsContext';
 import useBreakpoints from '../../common/useBreakpoints';
+import useSetPreferences from '../../common/useSetPreferences';
+import useGetPreferences from '../../common/useGetPreferences';
 import withAuth from '../../common/withAuth';
 import Layout from '../../components/layout/Layout';
 import useUserContext from '../../common/useUserContext';
 
+import GenderInput from './gender-input';
+
 import styles from './Account.module.css';
 
 const Account = () => {
+    const [gender, setGender] = useState('');
+
     const { user } = useUserContext();
     const { lteSmall } = useBreakpoints();
+    const { add, clear } = useNotificationContext();
 
-    const userImage = user.image
-        ? user.image
-        : 'https://react.semantic-ui.com/images/wireframe/image.png';
+    const { data: preferencesData, isFetchedAfterMount } = useGetPreferences();
+
+    const userImage = user?.image ? user.image : 'default.png';
+
+    const { handleSubmit, register, setValue } = useForm({
+        defaultValues: { numQuestions: 3 },
+    });
+
+    const [setPreferences, { isLoading, data, error }] = useSetPreferences();
+
+    const submit = useCallback(
+        ({ numQuestions }) => {
+            setPreferences({ numQuestions, gender }).catch(() =>
+                add({
+                    message: error?.message,
+                    category: NOTIFICATION_CATEGORIES.error,
+                })
+            );
+        },
+        [setPreferences, gender, add, error?.message]
+    );
+
+    const handleGender = useCallback((gender) => setGender(gender), []);
+
+    useEffect(() => {
+        if (isFetchedAfterMount) {
+            setValue(
+                'numQuestions',
+                parseInt(preferencesData?.numQuestions, 10)
+            );
+
+            setGender(preferencesData?.gender);
+        }
+    }, [isFetchedAfterMount, preferencesData, setValue]);
+
+    useEffect(() => {
+        clear();
+
+        if (error || data?.errorCode) {
+            add({
+                message: error?.message ?? data?.message,
+                category: NOTIFICATION_CATEGORIES.error,
+            });
+        } else if (data) {
+            add({
+                category: NOTIFICATION_CATEGORIES.success,
+            });
+        }
+    }, [add, error, data, clear]);
 
     return (
         <Layout>
+            <ToastContainer bodyClassName={styles.toastBody} hideProgressBar />
             <Segment raised padded={lteSmall ? true : 'very'}>
                 <Item.Group className={styles.userWrapper}>
                     <Item className={styles.user}>
@@ -68,10 +129,27 @@ const Account = () => {
                     />
                 </Statistic.Group>
                 <Divider />
-                <Form>
+                <Form
+                    onSubmit={handleSubmit(submit)}
+                    loading={!isFetchedAfterMount || isLoading}
+                >
+                    <Form.Field>
+                        <GenderInput
+                            gender={gender}
+                            onSetGender={handleGender}
+                        />
+                    </Form.Field>
                     <Form.Field inline>
                         <label>Nº of questions</label>
-                        <Input type={'number'} max={5} />
+                        {isFetchedAfterMount && (
+                            <input
+                                ref={register}
+                                name="numQuestions"
+                                type="number"
+                                min={3}
+                                max={20}
+                            />
+                        )}
                     </Form.Field>
                     <Button primary size="big">
                         Save
@@ -84,4 +162,6 @@ const Account = () => {
 
 Account.propTypes = {};
 
-export default withAuth(Account);
+const enhanced = compose(withAuth, withNotificationProvider);
+
+export default enhanced(Account);

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { Button, Dimmer, Form, Loader, Segment } from 'semantic-ui-react';
+import { Button, Dimmer, Form, Loader } from 'semantic-ui-react';
 import { useForm } from 'react-hook-form';
 import { compose } from 'recompose';
 

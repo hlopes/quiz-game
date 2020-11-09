@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import he from 'he';
 import {
     Dimmer,
-    Grid,
     Loader,
     Card,
     Icon,
@@ -17,13 +16,15 @@ import {
 
 import getQuestionImage from '../../utils/getQuestionImage';
 import withAuth from '../../common/withAuth';
-import useQuestions from '../../common/useQuestions';
+import useGetQuestions from '../../common/useGetQuestions';
 import Layout from '../../components/layout/Layout';
 import Question from '../../components/question/Question';
 
 import useSetScore from '../../common/useSetScore';
 
 import useUserContext from '../../common/useUserContext';
+
+import useGetPreferences from '../../common/useGetPreferences';
 
 import styles from './Game.module.css';
 
@@ -53,11 +54,16 @@ const Game = () => {
     const [displayScore, setDisplayScore] = useState(false);
 
     const {
+        data: getPreferencesData,
+        isFetchedAfterMount,
+    } = useGetPreferences();
+
+    const {
         error: getQuestionsError,
         data: getQuestionsData,
         isLoading: getQuestionsLoading,
         refetch,
-    } = useQuestions();
+    } = useGetQuestions(getPreferencesData?.numQuestions);
 
     const [setScoreAPI] = useSetScore();
 
@@ -83,7 +89,15 @@ const Game = () => {
         (isLast) => () => {
             const isCorrect =
                 selectedAnswer === currentQuestion?.correct_answer;
-            const currentScore = isCorrect ? score + 1 : score;
+            let currentScore = isCorrect ? score + 1 : score;
+
+            if (currentQuestion?.difficulty === 'medium') {
+                currentScore += 1;
+            }
+
+            if (currentQuestion?.difficulty === 'hard') {
+                currentScore += 2;
+            }
 
             if (isCorrect) {
                 setScore(currentScore);
@@ -103,8 +117,9 @@ const Game = () => {
         [
             selectedAnswer,
             currentQuestion?.correct_answer,
-            updateScore,
+            currentQuestion?.difficulty,
             score,
+            updateScore,
             currentQuestionIndex,
             getQuestionsData?.results?.length,
         ]
@@ -124,6 +139,13 @@ const Game = () => {
         await refetch();
     }, [refetch]);
 
+    useEffect(() => {
+        if (isFetchedAfterMount) {
+            // TODO deal with the promise
+            refetch();
+        }
+    }, [isFetchedAfterMount, refetch]);
+
     const hasError =
         getQuestionsError ||
         (getQuestionsData && getQuestionsData.response_code !== 0);
@@ -141,6 +163,18 @@ const Game = () => {
 
     const questionImage = getQuestionImage(currentQuestion?.category);
 
+    const totalScore = getQuestionsData?.results?.reduce((result, question) => {
+        if (question?.difficulty === 'medium') {
+            return result + 2;
+        }
+
+        if (question?.difficulty === 'hard') {
+            return result + 3;
+        }
+
+        return result + 1;
+    }, 0);
+
     return getQuestionsLoading || !getQuestionsData?.results ? (
         <Dimmer active inverted>
             <Loader size="big">Loading</Loader>
@@ -153,13 +187,15 @@ const Game = () => {
                         <Header as="h2">Your Score is</Header>
                         <Statistic>
                             <Statistic.Value>
-                                {score}/{getQuestionsData?.results?.length}
+                                {score}/{totalScore}
                             </Statistic.Value>
                             <Statistic.Label>
                                 <Rating
                                     disabled
                                     maxRating={5}
-                                    defaultRating={score / 2}
+                                    defaultRating={Math.floor(
+                                        (score * 5) / totalScore
+                                    )}
                                     icon="star"
                                     size="massive"
                                 />

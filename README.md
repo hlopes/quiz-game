@@ -1,13 +1,17 @@
 # Quiz Game
 
-Coming soon
-[Demo of Quiz Game](https://yog9.github.io/SnapShot/)
+[Github](https://yog9.github.io/SnapShot/)
+
+[Demo of Quiz Game](https://quiz-game-psi.vercel.app/)
+
 
 ![](/screenshot.png)
 
 ### Summary
 
 Quiz Game is a game created using NextJS, React,React Hooks and Context API. The Routes were setup for five default pages.
+
+This project was bootstrapped with [Create Next App](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ### Motivation
 
@@ -30,33 +34,33 @@ Create a .env.local file in project root folder. In this file write
 
 ### Built With
 
-- NextJS
-- React js
+- React Toastify
+- Semantic UI
+- React Query
 - React Hooks
 - Context API
+- React js
+- NextJS
+- Next/Auth
 - MongoDB Atlas
 - JWT Authentication
-- React Query
-- Semantic UI
-- React Toastify
 
 ### Features
 
-**1. Responsive Design using @artsy/fresnel and Semantic UI.**
+*1. Responsive design using `@artsy/fresnel` and Semantic UI.*
 
-**2. Login and Register of players.**
+*2. Login (social networks) and Register of players.*
 
-**3. Top 10.**
+*3. Top 10.*
 
-**4. Game.**
+*4. Game.*
 
-### Coming Soon
+*5. Account:*
+- Statistics;
+- Gender;
+- Number of Question;
 
-- Account section
-
-### Contributing
-
-This project was bootstrapped with [Create Next App](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+*5. About.*
 
 ## Getting Started
 
@@ -69,7 +73,3 @@ yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.

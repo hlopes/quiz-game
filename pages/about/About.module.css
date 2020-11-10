@@ -1,0 +1,11 @@
+.wrapper {
+    text-align: left;
+}
+
+.wrapper img {
+    width: 100%;
+}
+
+.wrapper ul {
+    list-style-type: none;
+}

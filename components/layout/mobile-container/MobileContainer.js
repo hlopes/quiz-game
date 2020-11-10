@@ -69,6 +69,13 @@ const MobileContainer = ({ children }) => {
                             )}
                         </Menu.Item>
                     </Link>
+                    <Link href={'/about'}>
+                        <Menu.Item
+                            active={['/about'].includes(router?.pathname)}
+                        >
+                            About
+                        </Menu.Item>
+                    </Link>
                     {!isAuthenticated && (
                         <Link href={'/register'}>
                             <Menu.Item

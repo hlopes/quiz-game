@@ -114,11 +114,6 @@ const Account = () => {
                 >
                     <Statistic
                         label="Score"
-                        color="yellow"
-                        value={`${user.score}%`}
-                    />
-                    <Statistic
-                        label="Correct"
                         color="olive"
                         value={user.points}
                     />

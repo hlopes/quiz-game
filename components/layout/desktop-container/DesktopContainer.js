@@ -6,6 +6,7 @@ import {
     Icon,
     Menu,
     Segment,
+    Sidebar,
     Visibility,
 } from 'semantic-ui-react';
 
@@ -65,6 +66,15 @@ const DesktopContainer = ({ children }) => {
                                     </Menu.Item>
                                 </Link>
                             )}
+                            <Link href={'/about'}>
+                                <Menu.Item
+                                    active={['/about'].includes(
+                                        router?.pathname
+                                    )}
+                                >
+                                    About
+                                </Menu.Item>
+                            </Link>
                             <Menu.Item position="right">
                                 <Link
                                     href={

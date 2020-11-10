@@ -26,7 +26,7 @@ const About = ({ aboutData }) => {
 
 export async function getStaticProps() {
     const aboutData = await getAboutData();
-    console.log('### aboutData ', aboutData);
+
     return {
         props: {
             aboutData,

@@ -20,9 +20,33 @@ The purpose of this project was to get familiar with NextJS.
 ### Getting Started
 
 Click the demo link or clone/download the repository on your local machine.
-Create a .env.local file in project root folder. In this file write
-`DATABASE_URL= "YOUR_CONNECTION_STRING"
- JWT_SECRET="YOUR_SECRET"`
+Create a .env.local file in project root folder. In this file add the following environment variables
+
+`MONGODB_URI`
+
+`MONGODB_DB`
+
+`JWT_SECRET`
+
+`NEXTAUTH_URL`
+
+`NEXTAUTH_GOOGLE_ID`
+
+`NEXTAUTH_GOOGLE_SECRET`
+
+`NEXTAUTH_TWITTER_ID`
+
+`NEXTAUTH_TWITTER_SECRET`
+
+`NEXTAUTH_GITHUB_ID`
+
+`NEXTAUTH_GITHUB_SECRET`
+
+`NEXTAUTH_FACEBOOK_ID`
+
+`NEXTAUTH_FACEBOOK_SECRET`
+
+`NEXTAUTH_DATABASE_URL`
 
 ##### Install dependencies
 
@@ -34,16 +58,14 @@ Create a .env.local file in project root folder. In this file write
 
 ### Built With
 
-- React Toastify
-- Semantic UI
-- React Query
-- React Hooks
-- Context API
-- React js
-- NextJS
-- Next/Auth
-- MongoDB Atlas
-- JWT Authentication
+- [React Toastify](https://fkhadra.github.io/react-toastify/introduction/)
+- [Semantic UI](https://react.semantic-ui.com/)
+- [React Query](https://react-query.tanstack.com/)
+- [React JS](https://reactjs.org/)
+- [NextJS](https://nextjs.org/)
+- [Next/Auth](https://next-auth.js.org/)
+- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+- [JWT Authentication](https://jwt.io/)
 
 ### Features
 

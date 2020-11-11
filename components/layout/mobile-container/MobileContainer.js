@@ -9,8 +9,6 @@ import { Media } from '../../media/Media';
 
 import useUserContext from '../../../common/useUserContext';
 
-import styles from './MobileContainer.module.css';
-
 const MobileContainer = ({ children }) => {
     const router = useRouter();
     const { isAuthenticated, logout } = useUserContext();
@@ -52,18 +50,12 @@ const MobileContainer = ({ children }) => {
                         >
                             {isAuthenticated ? (
                                 <>
-                                    <Icon
-                                        name="user"
-                                        className={styles.userIcon}
-                                    />
+                                    <Icon name="user" />
                                     Account
                                 </>
                             ) : (
                                 <>
-                                    <Icon
-                                        name="user outline"
-                                        className={styles.userIcon}
-                                    />
+                                    <Icon name="user outline" />
                                     Login
                                 </>
                             )}
@@ -81,10 +73,7 @@ const MobileContainer = ({ children }) => {
                             <Menu.Item
                                 active={router?.pathname === '/register'}
                             >
-                                <Icon
-                                    name="add user"
-                                    className={styles.userIcon}
-                                />
+                                <Icon name="add user" />
                                 Register
                             </Menu.Item>
                         </Link>

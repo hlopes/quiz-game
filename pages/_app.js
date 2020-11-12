@@ -1,4 +1,4 @@
-import React, { StrictMode } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { ReactQueryDevtools } from 'react-query-devtools';
 import { Provider as AuthProvider } from 'next-auth/client';
@@ -18,18 +18,16 @@ function App({ Component, pageProps }) {
     const { session } = pageProps;
 
     return (
-        <StrictMode>
-            <ErrorBoundary>
-                <HydrationRenderProvider>
-                    <AuthProvider session={session}>
-                        <UserContextProvider>
-                            <Component {...pageProps} />
-                        </UserContextProvider>
-                    </AuthProvider>
-                </HydrationRenderProvider>
-                {isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
-            </ErrorBoundary>
-        </StrictMode>
+        <ErrorBoundary>
+            <HydrationRenderProvider>
+                <AuthProvider session={session}>
+                    <UserContextProvider>
+                        <Component {...pageProps} />
+                    </UserContextProvider>
+                </AuthProvider>
+            </HydrationRenderProvider>
+            {isDevelopment && <ReactQueryDevtools initialIsOpen={false} />}
+        </ErrorBoundary>
     );
 }
 

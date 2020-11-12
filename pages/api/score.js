@@ -20,19 +20,23 @@ const handler = async (req, res) => {
         return res.json({ ...errors.INVALID_EMAIL });
     }
 
-    const totalPoints = savedUser?.points + points;
-    const totalQuestions = savedUser?.questionsAnswered + questions;
-    const score = (
-        Math.round(((totalPoints * 100) / totalQuestions) * 100) / 100
-    ).toFixed(2);
-
     await db.collection('users').updateOne(
         { email },
         {
             $set: {
                 points: savedUser?.points + points,
                 questionsAnswered: savedUser?.questionsAnswered + questions,
-                score,
+            },
+        }
+    );
+
+    const foundUser = await db.collection('users').findOne({ email });
+
+    await db.collection('preferences').updateOne(
+        { 'user.email': email },
+        {
+            $set: {
+                user: foundUser,
             },
         }
     );

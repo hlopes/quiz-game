@@ -6,7 +6,7 @@ import { mediaStyle } from '../components/media/Media';
 export default class AppDocument extends Document {
     render() {
         return (
-            <Html>
+            <Html lang="en">
                 <Head>
                     <style
                         type="text/css"

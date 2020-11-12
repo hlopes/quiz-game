@@ -57,10 +57,17 @@ const handler = async (req, res) => {
                 image,
                 points: 0,
                 questionsAnswered: 0,
-                score: 0,
             };
 
             await db.collection('users').insertOne(user);
+
+            const foundUser = await db.collection('users').findOne({ email });
+
+            await db.collection('preferences').insertOne({
+                user: foundUser,
+                numQuestions: 3,
+                gender: '',
+            });
 
             const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
 

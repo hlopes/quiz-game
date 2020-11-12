@@ -12,27 +12,15 @@ const handler = async (req, res) => {
 
     const { db } = await connectToDatabase();
 
-    const foundUser = await db.collection('users').findOne({ email });
-
-    const foundPreferences = await db
-        .collection('preferences')
-        .findOne({ user: foundUser });
-
-    if (foundPreferences) {
-        await db.collection('preferences').updateOne(
-            { user: foundUser },
-            {
-                $set: {
-                    numQuestions,
-                    gender,
-                },
-            }
-        );
-    } else {
-        await db
-            .collection('preferences')
-            .insertOne({ user: foundUser, numQuestions, gender });
-    }
+    await db.collection('preferences').updateOne(
+        { 'user.email': email },
+        {
+            $set: {
+                numQuestions,
+                gender,
+            },
+        }
+    );
 
     return res.json({
         message: 'Saved successfully',

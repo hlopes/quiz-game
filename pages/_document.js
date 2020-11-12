@@ -8,6 +8,7 @@ export default class AppDocument extends Document {
         return (
             <Html lang="en">
                 <Head>
+                    <meta name="description" content="Quiz Game" />
                     <style
                         type="text/css"
                         dangerouslySetInnerHTML={{ __html: mediaStyle }}

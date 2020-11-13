@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 
-import useUserContext from './useUserContext';
+import useUserContext from '../useUserContext';
 
 const useSetPreferences = () => {
     const { user } = useUserContext();

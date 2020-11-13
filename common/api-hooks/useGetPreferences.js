@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 
-import useUserContext from './useUserContext';
+import useUserContext from '../useUserContext';
 
 const useGetPreferences = () => {
     const { user } = useUserContext();

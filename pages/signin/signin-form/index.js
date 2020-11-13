@@ -11,7 +11,7 @@ import {
     useNotificationContext,
     withNotificationProvider,
 } from '../../../common/useNotificationsContext';
-import useLogin from '../../../common/useLogin';
+import useLogin from '../../../common/api-hooks/useLogin';
 import useUserContext from '../../../common/useUserContext';
 
 import styles from '../Signin.module.css';

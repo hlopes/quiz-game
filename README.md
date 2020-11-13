@@ -71,7 +71,7 @@ Create a .env.local file in project root folder. In this file add the following 
 
 *1. Responsive design using `@artsy/fresnel` and Semantic UI.*
 
-*2. Login (social networks) and Register of players.*
+*2. Login and Register of players.*
 
 *3. Top 10.*
 
@@ -82,7 +82,7 @@ Create a .env.local file in project root folder. In this file add the following 
 - Gender;
 - Number of Question;
 
-*5. About.*
+*6. About.*
 
 ## Getting Started
 

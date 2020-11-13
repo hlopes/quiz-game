@@ -20,8 +20,8 @@ import {
     withNotificationProvider,
 } from '../../common/useNotificationsContext';
 import useUserContext from '../../common/useUserContext';
-import withGuest from '../../common/withGuest';
-import useRegister from '../../common/useRegister';
+import withGuest from '../../common/hocs/withGuest';
+import useRegister from '../../common/api-hooks/useRegister';
 import Layout from '../../components/layout/Layout';
 
 import styles from './Register.module.css';

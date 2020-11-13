@@ -10,8 +10,8 @@
         "eslint:recommended",
         "plugin:prettier/recommended",
         "plugin:react/recommended",
-        "prettier/react",
-        "plugin:compat/recommended"
+        "plugin:compat/recommended",
+        "prettier/react"
     ],
     "parser": "babel-eslint",
     "parserOptions": {

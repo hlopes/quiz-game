@@ -19,9 +19,9 @@ import {
     withNotificationProvider,
 } from '../../common/useNotificationsContext';
 import useBreakpoints from '../../common/useBreakpoints';
-import useSetPreferences from '../../common/useSetPreferences';
-import useGetPreferences from '../../common/useGetPreferences';
-import withAuth from '../../common/withAuth';
+import useSetPreferences from '../../common/api-hooks/useSetPreferences';
+import useGetPreferences from '../../common/api-hooks/useGetPreferences';
+import withAuth from '../../common/hocs/withAuth';
 import Layout from '../../components/layout/Layout';
 import useUserContext from '../../common/useUserContext';
 

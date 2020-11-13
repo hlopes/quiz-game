@@ -6,8 +6,8 @@ import classnames from 'classnames';
 
 import { Button } from 'semantic-ui-react';
 
-import useBreakpoints from '../../common/useBreakpoints';
-import shuffle from '../../utils/shuffle';
+import useBreakpoints from '../../../common/useBreakpoints';
+import shuffle from '../../../utils/shuffle';
 
 import styles from './Question.module.css';
 

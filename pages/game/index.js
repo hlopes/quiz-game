@@ -15,16 +15,16 @@ import {
 } from 'semantic-ui-react';
 
 import getQuestionImage from '../../utils/getQuestionImage';
-import withAuth from '../../common/withAuth';
-import useGetQuestions from '../../common/useGetQuestions';
+import withAuth from '../../common/hocs/withAuth';
+import useGetQuestions from '../../common/api-hooks/useGetQuestions';
 import Layout from '../../components/layout/Layout';
-import Question from '../../components/question/Question';
+import Question from './question/Question';
 
-import useSetScore from '../../common/useSetScore';
+import useSetScore from '../../common/api-hooks/useSetScore';
 
 import useUserContext from '../../common/useUserContext';
 
-import useGetPreferences from '../../common/useGetPreferences';
+import useGetPreferences from '../../common/api-hooks/useGetPreferences';
 
 import styles from './Game.module.css';
 

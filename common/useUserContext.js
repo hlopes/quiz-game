@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { useSession, signout } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
-import useRegister from '../common/useRegister';
+import useRegister from './api-hooks/useRegister';
 
 const initialState = null;
 

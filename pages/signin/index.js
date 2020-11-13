@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {
     Button,
     Dimmer,
-    Form,
     Grid,
     Header as HeaderSem,
+    Icon,
     Loader,
     Message,
     Segment,
@@ -22,7 +22,8 @@ import SigninForm from './signin-form';
 import styles from './Signin.module.css';
 
 function Index({ providers }) {
-    const [loading] = useSession();
+    // eslint-disable-next-line no-unused-vars
+    const [session, loading] = useSession();
 
     const handleSignInProvider = useCallback(
         (provider) => () => {
@@ -60,19 +61,20 @@ function Index({ providers }) {
                                 <Link href={'/register'}>Register</Link>
                             </Message>
                             {providers
-                                ? Object.values(
-                                      providers
-                                  ).map((provider, index) => (
-                                      <Button
-                                          key={index}
-                                          circular
-                                          icon={provider.id}
-                                          onClick={handleSignInProvider(
-                                              provider.id
-                                          )}
-                                          size={'big'}
-                                      />
-                                  ))
+                                ? Object.values(providers).map(
+                                      (provider, index) => (
+                                          <Button
+                                              key={index}
+                                              circular
+                                              onClick={handleSignInProvider(
+                                                  provider.id
+                                              )}
+                                          >
+                                              <Icon name={provider.id} /> Signin
+                                              with Google
+                                          </Button>
+                                      )
+                                  )
                                 : null}
                         </Segment>
                     </Grid.Column>

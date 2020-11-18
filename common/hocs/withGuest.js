@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import useUserContext from './/useUserContext';
+import useUserContext from '../useUserContext';
 
 export default function withGuest(Component) {
     return function WithGuestComponent(props) {

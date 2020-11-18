@@ -39,9 +39,11 @@ const Question = ({ question, onAnswerSelection }) => {
         if (questionTypes.BOOLEAN === question?.type) {
             return ['True', 'False'];
         }
+
+        return [];
     }, [question?.correct_answer, question?.incorrect_answers, question?.type]);
 
-    return answers.map((answer, index) => {
+    return answers?.map((answer, index) => {
         const isAnswerSelected =
             !isEmpty(answers) &&
             selectedAnswer &&

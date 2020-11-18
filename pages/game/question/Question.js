@@ -29,17 +29,17 @@ const Question = ({ question, onAnswerSelection }) => {
     );
 
     const answers = useMemo(() => {
-        if (questionTypes.MULTIPLE === question.type) {
+        if (questionTypes.MULTIPLE === question?.type) {
             return shuffle([
                 question?.correct_answer,
                 ...question?.incorrect_answers,
             ]);
         }
 
-        if (questionTypes.BOOLEAN === question.type) {
+        if (questionTypes.BOOLEAN === question?.type) {
             return ['True', 'False'];
         }
-    }, [question?.correct_answer, question?.incorrect_answers, question.type]);
+    }, [question?.correct_answer, question?.incorrect_answers, question?.type]);
 
     return answers.map((answer, index) => {
         const isAnswerSelected =

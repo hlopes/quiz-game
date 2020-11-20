@@ -6,7 +6,6 @@ import {
     Icon,
     Menu,
     Segment,
-    Sidebar,
     Visibility,
 } from 'semantic-ui-react';
 

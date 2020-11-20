@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import isEmpty from 'lodash/isEmpty';
 
-import getRandomAvatar from '../utils/getAvatar';
+import getAvatar from '../utils/getAvatar';
 import { connectToDatabase } from '../utils/mongodb';
 import Layout from '../components/layout/Layout';
 import useBreakpoints from '../common/useBreakpoints';
@@ -61,7 +61,7 @@ const Home = ({ top }) => {
                                                 ) : (
                                                     <Image
                                                         alt={player?.user?.name}
-                                                        src={getRandomAvatar(
+                                                        src={getAvatar(
                                                             player?.gender
                                                         )}
                                                         rounded

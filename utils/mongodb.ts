@@ -4,13 +4,13 @@ const { MONGODB_URI, MONGODB_DB } = process.env;
 
 if (!MONGODB_URI) {
     throw new Error(
-        'Please define the MONGODB_URI environment variable inside .env.local.local'
+        'Please define the MONGODB_URI environment variable inside .env.local'
     );
 }
 
 if (!MONGODB_DB) {
     throw new Error(
-        'Please define the MONGODB_DB environment variable inside .env.local.local'
+        'Please define the MONGODB_DB environment variable inside .env.local'
     );
 }
 
@@ -19,9 +19,11 @@ if (!MONGODB_DB) {
  * in development. This prevents connections growing exponentiatlly
  * during API Route usage.
  */
+// @ts-ignore
 let cached = global.mongo;
 
 if (!cached) {
+    // @ts-ignore
     cached = global.mongo = {};
 }
 
@@ -39,11 +41,13 @@ export async function connectToDatabase() {
 
         cached.promise = MongoClient.connect(MONGODB_URI, opts)
             .then((client) => {
+                // @ts-ignore
                 conn.client = client;
 
                 return client.db(MONGODB_DB);
             })
             .then((db) => {
+                // @ts-ignore
                 conn.db = db;
                 cached.conn = conn;
             });

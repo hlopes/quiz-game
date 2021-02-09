@@ -1,0 +1,6 @@
+{
+    "hooks": {
+        "commit-msg": "commitlint --edit ./.git/COMMIT_EDITMSG",
+        "pre-commit": "lint-staged"
+    }
+}

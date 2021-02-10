@@ -3,20 +3,12 @@ import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
 const providers = [
-    Providers.Google({
-        clientId: process.env.NEXTAUTH_GOOGLE_CLIENT_ID,
-        clientSecret: process.env.NEXTAUTH_GOOGLE_CLIENT_SECRET,
+    Providers.Auth0({
+        clientId: process.env.AUTH0_CLIENT_ID,
+        clientSecret: process.env.AUTH0_CLIENT_SECRET,
+        domain: process.env.AUTH0_DOMAIN,
     }),
 ];
-
-if (process.env.FACEBOOK_CLIENT_ID) {
-    providers.push(
-        Providers.Facebook({
-            clientId: process.env.FACEBOOK_CLIENT_ID,
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-        })
-    );
-}
 
 const options = {
     // Configure one or more authentication providers

@@ -20,7 +20,12 @@ const DesktopNavigation: FC = () => {
     const [session] = useSession();
 
     const handleAuthLogin = useCallback(
-        () => (!session ? signIn() : router.push('/account')),
+        () =>
+            !session
+                ? signIn()
+                : router.pathname !== '/account'
+                ? router.push('/account')
+                : () => {},
         [session, router]
     );
 

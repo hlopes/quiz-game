@@ -2,8 +2,7 @@ import styled from '@emotion/styled';
 
 import { Card, Statistic } from 'semantic-ui-react';
 import { gteSmallMedia } from '@theme/custom-media';
-
-import { Theme } from '../../theme/styles';
+import { Theme } from '@theme/styles';
 
 type ThemeProp = {
     theme?: Theme;

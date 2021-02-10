@@ -23,12 +23,15 @@ import useBreakpoints from '@helpers/useBreakpoints';
 import useSetPreferences from '@helpers/useSetPreferences';
 import useHydrationRender from '@helpers/useHydrationRender';
 import Layout from '@components/layout/Layout';
+import GenderInput from '@components/gender-input';
+
+import {
+    StyledItemGroup,
+    StyledItem,
+    StyledStatisticGroup,
+} from '@theme/pages/Account.styles';
 
 import { User } from '../../types/User';
-
-import GenderInput from './gender-input';
-
-import { StyledItemGroup, StyledItem, StyledStatisticGroup } from './styles';
 
 export async function getServerSideProps(context) {
     const session = await getSession(context);

@@ -6,7 +6,7 @@ import Layout from '@components/layout/Layout';
 
 import useDarkMode from 'use-dark-mode';
 
-import { StyledSegment } from './styles';
+import { StyledSegment } from '@theme/pages/About.styles';
 
 export const getStaticProps = async () => {
     const aboutData = await getAboutData();

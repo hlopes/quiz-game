@@ -1,4 +1,5 @@
 import React, { FC, useState, useMemo, useCallback, useEffect } from 'react';
+import useDarkMode from 'use-dark-mode';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { getSession } from 'next-auth/client';
@@ -21,12 +22,7 @@ import getQuestionImage from '@utils/getQuestionImage';
 import useGetQuestions from '@helpers/useGetQuestions';
 import useSetScore from '@helpers/useSetScore';
 import Layout from '@components/layout/Layout';
-
-import useDarkMode from 'use-dark-mode';
-
-import { User } from '../../types/User';
-
-import Question from './question/Question';
+import Question from '@components/question/Question';
 
 import {
     DifficultyLabel,
@@ -35,7 +31,9 @@ import {
     CardContent,
     CardHeader,
     StatisticValue,
-} from './styles';
+} from '@theme/pages/Game.styles';
+
+import { User } from '../../types/User';
 
 type DifficultyType = {
     color: 'red' | 'orange' | 'green';

@@ -1,9 +1,15 @@
 import React, { FC } from 'react';
 import styled from '@emotion/styled';
 
-const StyledFooter = styled.footer`
+import { Theme } from '../../../theme/styles';
+
+type ThemeProp = {
+    theme?: Theme;
+};
+
+const StyledFooter = styled.footer<ThemeProp>`
     padding: 1rem;
-    color: ${({ theme }) => `${theme.text.primary} !important`};
+    color: ${({ theme }: ThemeProp) => `${theme.text.primary} !important`};
     font-weight: bold;
     text-align: right;
 `;

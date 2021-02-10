@@ -99,6 +99,17 @@ export const StyledToastContainer = styled(ToastContainer)`
     }
 `;
 
+export type Theme = {
+    bg: {
+        primary: string;
+        secondary: string;
+    };
+    text: {
+        primary: string;
+        secondary: string;
+    };
+};
+
 export const LIGHT_THEME = {
     bg: {
         primary: '#fff',

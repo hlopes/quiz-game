@@ -9,6 +9,10 @@ const options = {
             clientId: process.env.NEXTAUTH_GOOGLE_CLIENT_ID,
             clientSecret: process.env.NEXTAUTH_GOOGLE_CLIENT_SECRET,
         }),
+        Providers.Facebook({
+            clientId: process.env.FACEBOOK_CLIENT_ID,
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        }),
     ],
     // @link https://next-auth.js.org/configuration/databases
     database: process.env.NEXTAUTH_DATABASE_URL,

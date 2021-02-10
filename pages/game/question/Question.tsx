@@ -61,6 +61,7 @@ const Question = ({ question, onAnswerSelection, isCorrect }) => {
 
         return (
             <Wrapper key={index}>
+                {/*@ts-ignore*/}
                 <Button
                     key={index}
                     id={`question-${index}`}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { FC, useState, useMemo, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { getSession } from 'next-auth/client';
@@ -24,6 +24,8 @@ import Layout from '@components/layout/Layout';
 
 import useDarkMode from 'use-dark-mode';
 
+import { User } from '../../types/User';
+
 import Question from './question/Question';
 
 import {
@@ -35,7 +37,13 @@ import {
     StatisticValue,
 } from './styles';
 
-const questionDifficultyTypes = [
+type DifficultyType = {
+    color: 'red' | 'orange' | 'green';
+    value: string;
+    text: string;
+};
+
+const questionDifficultyTypes: DifficultyType[] = [
     {
         value: 'easy',
         color: 'green',
@@ -68,7 +76,25 @@ export const getServerSideProps = async (context) => {
     };
 };
 
-const Game = ({ shouldRedirectHome, preferences, player }) => {
+type GameProps = {
+    shouldRedirectHome: boolean;
+    preferences: {
+        numQuestions: number;
+        gender: string;
+    };
+    player: {
+        email: string;
+        gender: string;
+        numQuestions: number;
+        user: User;
+    };
+};
+
+const Game: FC<GameProps> = ({
+    shouldRedirectHome,
+    preferences,
+    player,
+}: GameProps) => {
     const { value: isDark } = useDarkMode(false);
     const router = useRouter();
 
@@ -182,7 +208,7 @@ const Game = ({ shouldRedirectHome, preferences, player }) => {
         }
     }, [router, shouldRedirectHome]);
 
-    const questionDifficultyType = questionDifficultyTypes.filter(
+    const questionDifficultyType: DifficultyType = questionDifficultyTypes.filter(
         (type) => type?.value === currentQuestion?.difficulty
     )?.[0];
 
@@ -218,6 +244,7 @@ const Game = ({ shouldRedirectHome, preferences, player }) => {
         );
     }
 
+    // @ts-ignore
     return getQuestionsLoading || !getQuestionsData?.results ? (
         <Dimmer active inverted={!isDark}>
             <Loader size="big">Loading</Loader>
@@ -303,7 +330,9 @@ const Game = ({ shouldRedirectHome, preferences, player }) => {
                                         size="big"
                                     >
                                         Next
-                                        <Icon name="right arrow" />
+                                        {/*
+                                        // @ts-ignore */}
+                                        <Icon name={'right arrow'} />
                                     </Button>
                                 ) : (
                                     <Button
@@ -314,6 +343,8 @@ const Game = ({ shouldRedirectHome, preferences, player }) => {
                                         size="big"
                                     >
                                         End
+                                        {/*
+                                        // @ts-ignore */}
                                         <Icon name="right arrow" />
                                     </Button>
                                 )}

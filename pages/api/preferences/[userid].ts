@@ -43,7 +43,7 @@ const handler = async (req, res) => {
 
     return res.json({
         numQuestions,
-        gender,
+        gender
     });
 };
 

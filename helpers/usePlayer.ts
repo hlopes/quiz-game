@@ -1,30 +1,32 @@
 import useSWR from 'swr';
 import { useRef } from 'react';
 
-const useGetQuestions = () => {
+const usePlayer = () => {
     const wasFetchedRef = useRef(false);
 
-    const fetchQuestions = async (num) => {
+    const getUser = async (name) => {
         wasFetchedRef.current = true;
 
-        const result = await fetch(`https://opentdb.com/api.php?amount=${num}`);
+        const result = await fetch(`/api/player?name=${name}`);
 
         return await result.json();
     };
 
     const { data, error, isValidating, mutate } = useSWR(
-        'questions',
-        fetchQuestions,
+        '/api/player',
+        getUser,
         {
             revalidateOnMount: false,
             revalidateOnFocus: false,
         }
     );
 
-    const refetch = async (num) => {
-        const result = await fetchQuestions(num);
+    const refetch = async (name) => {
+        const data = await getUser(name);
 
-        await mutate(result, false);
+        await mutate(data, false);
+
+        return data;
     };
 
     return {
@@ -36,4 +38,4 @@ const useGetQuestions = () => {
     };
 };
 
-export default useGetQuestions;
+export default usePlayer;

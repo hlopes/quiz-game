@@ -1,6 +1,4 @@
-import { ObjectID } from 'mongodb';
-
-import { connectToDatabase } from '@utils/mongodb';
+import { getPreferencesByUserId } from '@lib/preferences';
 import errors from '@utils/errors';
 
 const handler = async (req, res) => {
@@ -14,37 +12,18 @@ const handler = async (req, res) => {
         return res.json({ ...errors.INVALID_EMAIL });
     }
 
-    const { db } = await connectToDatabase();
+    try {
+        const { numQuestions, gender } = await getPreferencesByUserId(userid);
 
-    const userIdObject = new ObjectID(userid);
-
-    const foundUser = await db
-        .collection('users')
-        .findOne({ _id: userIdObject });
-
-    if (!foundUser) {
-        res.statusCode = 422;
-
-        return res.json({ ...errors.INVALID_EMAIL });
-    }
-
-    const foundPreferences = await db.collection('preferences').findOne({
-        ['user._id']: foundUser._id,
-    });
-
-    if (!foundPreferences) {
         return res.json({
-            numQuestions: 3,
-            gender: '',
+            numQuestions,
+            gender,
         });
+    } catch (error) {
+        res.statusCode = 500;
+
+        return res.json({ ...errors.GET_USER_PREFERENCES });
     }
-
-    const { numQuestions, gender } = foundPreferences;
-
-    return res.json({
-        numQuestions,
-        gender
-    });
 };
 
 export default handler;

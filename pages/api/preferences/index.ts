@@ -1,4 +1,4 @@
-import { connectToDatabase } from '@utils/mongodb';
+import { updatePreferences } from '@lib/preferences';
 import errors from '@utils/errors';
 
 const handler = async (req, res) => {
@@ -10,21 +10,17 @@ const handler = async (req, res) => {
         return res.json({ ...errors.INVALID_EMAIL });
     }
 
-    const { db } = await connectToDatabase();
+    try {
+        await updatePreferences(email, numQuestions, gender);
 
-    await db.collection('preferences').updateOne(
-        { 'user.email': email },
-        {
-            $set: {
-                numQuestions,
-                gender,
-            },
-        }
-    );
+        return res.json({
+            message: 'Saved successfully',
+        });
+    } catch (error) {
+        res.statusCode = 500;
 
-    return res.json({
-        message: 'Saved successfully',
-    });
+        return res.json({ ...errors.UPDATE_USER_PREFERENCES });
+    }
 };
 
 export default handler;

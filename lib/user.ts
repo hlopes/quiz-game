@@ -13,19 +13,19 @@ export const getTopPlayers = async () => {
     return users.map(({ user }) => user);
 };
 
-export const getUserByEmail = async (email) => {
+export const getUserByName = async (name) => {
     const { db } = await connectToDatabase();
 
     const preferencesWithUser = await db
         .collection('preferences')
-        .findOne({ 'user.email': email });
+        .findOne({ 'user.name': name });
 
     if (preferencesWithUser) {
         return preferencesWithUser;
     }
 
     await db.collection('users').updateOne(
-        { email },
+        { name },
         {
             $set: {
                 points: 0,
@@ -34,7 +34,7 @@ export const getUserByEmail = async (email) => {
         }
     );
 
-    const user = await db.collection('users').findOne({ email });
+    const user = await db.collection('users').findOne({ name });
 
     await db
         .collection('preferences')

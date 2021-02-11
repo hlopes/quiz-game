@@ -1,8 +1,6 @@
 import React, { FC, useState, useMemo, useCallback, useEffect } from 'react';
 import useDarkMode from 'use-dark-mode';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { getSession } from 'next-auth/client';
 import he from 'he';
 import {
     Dimmer,
@@ -17,7 +15,6 @@ import {
     Header,
 } from 'semantic-ui-react';
 
-import { getPreferences } from '@lib/preferences';
 import getQuestionImage from '@utils/getQuestionImage';
 import useGetQuestions from '@helpers/useGetQuestions';
 import useSetScore from '@helpers/useSetScore';
@@ -33,7 +30,8 @@ import {
     StatisticValue,
 } from '@theme/pages/Game.styles';
 
-import { User } from '../../types/User';
+import useWithSession from '@helpers/useWithSession';
+import userPlayer from '@helpers/usePlayer';
 
 type DifficultyType = {
     color: 'red' | 'orange' | 'green';
@@ -59,42 +57,9 @@ const questionDifficultyTypes: DifficultyType[] = [
     },
 ];
 
-export const getServerSideProps = async (context) => {
-    const session = await getSession(context);
-    const userPreferences = await getPreferences(session.user.email);
-
-    return {
-        props: {
-            shouldRedirectHome: !session,
-            preferences: !session
-                ? null
-                : JSON.parse(JSON.stringify(userPreferences)),
-            player: !session ? null : JSON.parse(JSON.stringify(session.user)),
-        },
-    };
-};
-
-type GameProps = {
-    shouldRedirectHome: boolean;
-    preferences: {
-        numQuestions: number;
-        gender: string;
-    };
-    player: {
-        email: string;
-        gender: string;
-        numQuestions: number;
-        user: User;
-    };
-};
-
-const Game: FC<GameProps> = ({
-    shouldRedirectHome,
-    preferences,
-    player,
-}: GameProps) => {
+const Game: FC = () => {
     const { value: isDark } = useDarkMode(false);
-    const router = useRouter();
+    const { session, loadingComponent } = useWithSession(isDark);
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -103,11 +68,19 @@ const Game: FC<GameProps> = ({
     const [isCorrect, setIsCorrect] = useState(null);
 
     const {
-        refetch,
+        refetch: refetchPlayer,
+        data: player,
+        isValidating,
+        wasFetched: playerFetched,
+    } = userPlayer();
+
+    const {
+        refetch: refetchQuestions,
         error: getQuestionsError,
         data: getQuestionsData,
         isValidating: getQuestionsLoading,
-    } = useGetQuestions(preferences?.numQuestions ?? 3);
+        wasFetched: questionsFetched,
+    } = useGetQuestions();
 
     const { setScore: setScoreAPI } = useSetScore();
 
@@ -116,11 +89,12 @@ const Game: FC<GameProps> = ({
         [currentQuestionIndex, getQuestionsData?.results]
     );
 
-    const email = player.email;
+    const email = player?.user?.email;
 
     const updateScore = useCallback(
         async (finalScore) => {
             await setScoreAPI({
+                player,
                 email,
                 points: finalScore,
                 questions: getQuestionsData?.results?.length,
@@ -197,14 +171,22 @@ const Game: FC<GameProps> = ({
         setDisplayScore(false);
         setIsCorrect(null);
 
-        refetch();
-    }, [refetch]);
+        refetchQuestions(player?.numQuestions);
+    }, [refetchQuestions, player]);
+
+    const sessionUser = session?.user;
 
     useEffect(() => {
-        if (shouldRedirectHome) {
-            router.push('/');
+        if (sessionUser?.email && !isValidating && !player && !playerFetched) {
+            refetchPlayer(sessionUser.name);
         }
-    }, [router, shouldRedirectHome]);
+    }, [isValidating, player, refetchPlayer, sessionUser, playerFetched]);
+
+    useEffect(() => {
+        if (player && !questionsFetched) {
+            refetchQuestions(player?.numQuestions);
+        }
+    }, [player, refetchQuestions, questionsFetched]);
 
     const questionDifficultyType: DifficultyType = questionDifficultyTypes.filter(
         (type) => type?.value === currentQuestion?.difficulty
@@ -230,6 +212,10 @@ const Game: FC<GameProps> = ({
     const hasError =
         getQuestionsError ||
         (getQuestionsData && getQuestionsData.response_code !== 0);
+
+    if (loadingComponent) {
+        return loadingComponent;
+    }
 
     if (hasError) {
         return (

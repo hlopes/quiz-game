@@ -1,8 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import useDarkMode from 'use-dark-mode';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { signout, getSession, useSession } from 'next-auth/client';
+import { signout } from 'next-auth/client';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -14,13 +13,12 @@ import {
     Segment,
     Statistic,
     Icon,
-    Loader,
-    Dimmer,
 } from 'semantic-ui-react';
 
-import { getUserByEmail } from '@lib/user';
+import useWithSession from '@helpers/useWithSession';
+import userPlayer from '@helpers/usePlayer';
 import useBreakpoints from '@helpers/useBreakpoints';
-import useSetPreferences from '@helpers/useSetPreferences';
+import usePreferences from '@helpers/usePreferences';
 import useHydrationRender from '@helpers/useHydrationRender';
 import Layout from '@components/layout/Layout';
 import GenderInput from '@components/gender-input';
@@ -31,70 +29,46 @@ import {
     StyledStatisticGroup,
 } from '@theme/pages/Account.styles';
 
-import { User } from '../../types/User';
-
-export async function getServerSideProps(context) {
-    const session = await getSession(context);
-    const player = await getUserByEmail(session?.user.email);
-
-    return {
-        props: {
-            shouldRedirectHome: !session,
-            player: JSON.parse(JSON.stringify(player)),
-        },
-    };
-}
-
-type AccountProps = {
-    shouldRedirectHome: boolean;
-    player: {
-        gender: string;
-        numQuestions: number;
-        user: User;
-    };
-};
-
-const Account: NextPage<AccountProps> = ({
-    shouldRedirectHome,
-    player,
-}: AccountProps) => {
+const Account: NextPage = () => {
     const { value: isDark } = useDarkMode(false);
-    const [session, loading] = useSession();
-    const router = useRouter();
+    const { session, loadingComponent } = useWithSession(isDark);
     const isHydrationRender = useHydrationRender();
     const { lteSmall } = useBreakpoints();
 
+    const { wasFetched, data: player, isValidating, refetch } = userPlayer();
+    const { update } = usePreferences();
+
     const [gender, setGender] = useState(player?.gender ?? '');
 
-    const { handleSubmit, register } = useForm({
-        defaultValues: { numQuestions: player?.numQuestions ?? 3 },
+    const { handleSubmit, register, setValue } = useForm({
+        defaultValues: {
+            numQuestions: 3,
+        },
     });
-
-    const setPreferences = useSetPreferences();
 
     const submit = useCallback(
         ({ numQuestions }) => {
-            setPreferences({ numQuestions, gender });
+            update({ player, numQuestions, gender });
         },
-        [setPreferences, gender]
+        [update, player, gender]
     );
     const handleGender = useCallback((gender) => setGender(gender), []);
     const handleLogout = useCallback(() => signout(), []);
 
     useEffect(() => {
-        if (shouldRedirectHome || (!session && !loading)) {
-            router.push('/');
+        if (session?.user?.email && !isValidating && !player && !wasFetched) {
+            refetch(session.user.name);
         }
-    }, [loading, router, session, shouldRedirectHome]);
+    }, [isValidating, player, refetch, session?.user, wasFetched]);
 
-    if (loading) {
-        return (
-            <Layout>
-                <Dimmer active inverted={!isDark}>
-                    <Loader size="big">Loading</Loader>
-                </Dimmer>
-            </Layout>
-        );
+    useEffect(() => {
+        if (player) {
+            setValue('numQuestions', parseInt(player.numQuestions, 10));
+        }
+    }, [player, setValue]);
+
+    if (loadingComponent) {
+        return loadingComponent;
     }
 
     return (

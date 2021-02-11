@@ -31,4 +31,12 @@ export default {
         errorCode: 107,
         message: 'Error retrieving Users',
     },
+    UPDATE_USER_PREFERENCES: {
+        errorCode: 108,
+        message: 'Error updating player preferences',
+    },
+    GET_USER_PREFERENCES: {
+        errorCode: 109,
+        message: 'Error retrieving player preferences',
+    },
 };

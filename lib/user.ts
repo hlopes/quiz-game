@@ -21,14 +21,7 @@ export const getUserByEmail = async (email) => {
         .findOne({ 'user.email': email });
 
     if (preferencesWithUser) {
-        return {
-            ...preferencesWithUser,
-            additional: [
-                process.env.AUTH0_CLIENT_ID,
-                process.env.AUTH0_CLIENT_SECRET,
-                process.env.AUTH0_DOMAIN,
-            ],
-        };
+        return preferencesWithUser;
     }
 
     await db.collection('users').updateOne(
@@ -51,10 +44,5 @@ export const getUserByEmail = async (email) => {
         user,
         numQuestions: 3,
         gender: '',
-        additional: [
-            process.env.AUTH0_CLIENT_ID,
-            process.env.AUTH0_CLIENT_SECRET,
-            process.env.AUTH0_DOMAIN,
-        ],
     };
 };

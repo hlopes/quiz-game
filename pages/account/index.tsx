@@ -51,7 +51,6 @@ type AccountProps = {
         gender: string;
         numQuestions: number;
         user: User;
-        additional: string[];
     };
 };
 
@@ -59,7 +58,6 @@ const Account: NextPage<AccountProps> = ({
     shouldRedirectHome,
     player,
 }: AccountProps) => {
-    console.log('### player ', player);
     const { value: isDark } = useDarkMode(false);
     const [session, loading] = useSession();
     const router = useRouter();
@@ -101,9 +99,6 @@ const Account: NextPage<AccountProps> = ({
 
     return (
         <Layout>
-            {player.additional.map((s, index) => (
-                <p key={index}>{s}</p>
-            ))}
             <Segment inverted={isDark} raised padded={lteSmall ? true : 'very'}>
                 <StyledItemGroup>
                     <StyledItem>

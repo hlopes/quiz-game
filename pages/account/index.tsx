@@ -22,6 +22,7 @@ import usePreferences from '@helpers/usePreferences';
 import useHydrationRender from '@helpers/useHydrationRender';
 import Layout from '@components/layout/Layout';
 import GenderInput from '@components/gender-input';
+import GlobalLoader from '@components/global-loader';
 
 import {
     StyledItemGroup,
@@ -31,11 +32,11 @@ import {
 
 const Account: NextPage = () => {
     const { value: isDark } = useDarkMode(false);
-    const { session, loadingComponent } = useWithSession(isDark);
+    const { session, loading } = useWithSession();
     const isHydrationRender = useHydrationRender();
     const { lteSmall } = useBreakpoints();
 
-    const { wasFetched, data: player, isValidating, refetch } = userPlayer();
+    const { wasFetched, data: player, refetch } = userPlayer();
     const { update } = usePreferences();
 
     const [gender, setGender] = useState(player?.gender ?? '');
@@ -56,10 +57,10 @@ const Account: NextPage = () => {
     const handleLogout = useCallback(() => signout(), []);
 
     useEffect(() => {
-        if (session?.user?.email && !isValidating && !player && !wasFetched) {
+        if (session?.user?.email && !player && !wasFetched) {
             refetch(session.user.name);
         }
-    }, [isValidating, player, refetch, session?.user, wasFetched]);
+    }, [player, refetch, session?.user, wasFetched]);
 
     useEffect(() => {
         if (player) {
@@ -67,8 +68,8 @@ const Account: NextPage = () => {
         }
     }, [player, setValue]);
 
-    if (loadingComponent) {
-        return loadingComponent;
+    if (loading || !session || !player) {
+        return <GlobalLoader isDark={isDark} />;
     }
 
     return (

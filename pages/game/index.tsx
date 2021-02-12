@@ -18,8 +18,11 @@ import {
 import getQuestionImage from '@utils/getQuestionImage';
 import useGetQuestions from '@helpers/useGetQuestions';
 import useSetScore from '@helpers/useSetScore';
+import useWithSession from '@helpers/useWithSession';
+import userPlayer from '@helpers/usePlayer';
 import Layout from '@components/layout/Layout';
 import Question from '@components/question/Question';
+import GlobalLoader from '@components/global-loader';
 
 import {
     DifficultyLabel,
@@ -29,9 +32,6 @@ import {
     CardHeader,
     StatisticValue,
 } from '@theme/pages/Game.styles';
-
-import useWithSession from '@helpers/useWithSession';
-import userPlayer from '@helpers/usePlayer';
 
 type DifficultyType = {
     color: 'red' | 'orange' | 'green';
@@ -59,7 +59,7 @@ const questionDifficultyTypes: DifficultyType[] = [
 
 const Game: FC = () => {
     const { value: isDark } = useDarkMode(false);
-    const { session, loadingComponent } = useWithSession(isDark);
+    const { session, loading } = useWithSession();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -102,7 +102,7 @@ const Game: FC = () => {
 
             setDisplayScore(true);
         },
-        [email, getQuestionsData?.results?.length, setScoreAPI]
+        [email, getQuestionsData?.results?.length, player, setScoreAPI]
     );
 
     const handleNext = useCallback(
@@ -213,8 +213,8 @@ const Game: FC = () => {
         getQuestionsError ||
         (getQuestionsData && getQuestionsData.response_code !== 0);
 
-    if (loadingComponent) {
-        return loadingComponent;
+    if (loading || !session || !player) {
+        return <GlobalLoader isDark={isDark} />;
     }
 
     if (hasError) {

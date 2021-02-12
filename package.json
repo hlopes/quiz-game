@@ -10,7 +10,8 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "test:watch:quick": "yarn test:watch --no-coverage",
-        "test:coverage": "jest --coverage"
+        "test:coverage": "jest --coverage",
+        "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
     },
     "dependencies": {
         "global": "^4.4.0",
@@ -68,6 +69,7 @@
         "stylelint-config-rational-order": "^0.1.2",
         "stylelint-config-recommended": "^3.0.0",
         "swr": "^0.4.0",
+        "ts-node": "^9.1.1",
         "typeorm": "0.2.28",
         "use-dark-mode": "^2.3.1"
     },

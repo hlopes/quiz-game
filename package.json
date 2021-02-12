@@ -59,6 +59,7 @@
         "lodash": "^4.17.20",
         "mongodb": "^3.6.2",
         "next-auth": "^3.4.1",
+        "patch-package": "^6.2.2",
         "prettier": "^2.1.2",
         "prettier-eslint-cli": "^5.0.0",
         "react-hook-form": "^6.8.6",

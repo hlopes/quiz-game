@@ -1,0 +1,14 @@
+diff --git a/node_modules/next-auth/dist/adapters/typeorm/index.js b/node_modules/next-auth/dist/adapters/typeorm/index.js
+index 5ec937d..dc3de0f 100644
+--- a/node_modules/next-auth/dist/adapters/typeorm/index.js
++++ b/node_modules/next-auth/dist/adapters/typeorm/index.js
+@@ -36,6 +36,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
+ var Adapter = function Adapter(typeOrmConfig) {
+   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+   var typeOrmConfigObject = typeof typeOrmConfig === 'string' ? _config.default.parseConnectionString(typeOrmConfig) : typeOrmConfig;
++
++  console.log("### typeOrmConfigObject = ", typeOrmConfigObject);
++
+   var {
+     models: customModels = {}
+   } = options;

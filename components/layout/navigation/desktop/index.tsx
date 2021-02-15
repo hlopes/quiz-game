@@ -25,13 +25,11 @@ const DesktopNavigation: FC = () => {
                         <NavLink href={'/signin'}>🔐 Enter Game</NavLink>
                     )
                 ) : null}
-                <div>
-                    <NavLink href={'/'}>Home</NavLink>
-                    <NavLink href={'/about'}>About</NavLink>
-                    {data?.player && router.pathname !== '/game' && (
-                        <NavLink href={'/game'}>New Game</NavLink>
-                    )}
-                </div>
+                <NavLink href={'/'}>Home</NavLink>
+                <NavLink href={'/about'}>About</NavLink>
+                {data?.player && router.pathname !== '/game' && (
+                    <NavLink href={'/game'}>New Game</NavLink>
+                )}
                 <DarkModeToggle />
             </Nav>
         </Media>

@@ -24,8 +24,9 @@ import GlobalLoader from '@components/global-loader';
 
 import {
     StyledItemGroup,
-    StyledItem,
     StyledStatisticGroup,
+    StyledLogoutButton,
+    StyledSaveButton,
 } from '@theme/pages/Account.styles';
 
 const Account: NextPage = () => {
@@ -71,7 +72,7 @@ const Account: NextPage = () => {
         <Layout>
             <Segment inverted={isDark} raised padded={lteSmall ? true : 'very'}>
                 <StyledItemGroup>
-                    <StyledItem>
+                    <Item>
                         {data?.player?.preferences?.gender ? (
                             <Item.Image
                                 size="tiny"
@@ -92,11 +93,11 @@ const Account: NextPage = () => {
                                 </List.Item>
                             </List>
                         </Item.Content>
-                    </StyledItem>
+                        <StyledLogoutButton primary size="big" onClick={logout}>
+                            Logout
+                        </StyledLogoutButton>
+                    </Item>
                 </StyledItemGroup>
-                <Button primary size="big" onClick={logout}>
-                    Logout
-                </Button>
                 <Divider />
                 <StyledStatisticGroup
                     inverted={isDark}
@@ -133,9 +134,9 @@ const Account: NextPage = () => {
                             />
                         )}
                     </Form.Field>
-                    <Button primary size="big">
+                    <StyledSaveButton primary size="big">
                         Save
-                    </Button>
+                    </StyledSaveButton>
                 </Form>
             </Segment>
         </Layout>

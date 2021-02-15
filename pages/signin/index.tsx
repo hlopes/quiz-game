@@ -27,6 +27,7 @@ const SignIn: NextPage = () => {
                     You can insert any username. Please do not use a valid/real
                     email.Thank you.
                 </p>
+                <p>(existing account: abc/123)</p>
                 <SigninForm />
             </Segment>
         </Layout>

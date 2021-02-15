@@ -1,22 +1,17 @@
 import { useEffect } from 'react';
 
-import { useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import usePlayerContext from '@helpers/usePlayerContext';
 
 const useWithSession = () => {
     const router = useRouter();
-    const [session, loading] = useSession();
+    const { data, isLoading } = usePlayerContext();
 
     useEffect(() => {
-        if (!session && !loading) {
+        if (data?.player === null && !isLoading) {
             router.push('/');
         }
-    }, [loading, router, session]);
-
-    return {
-        session,
-        loading,
-    };
+    }, [data, router, isLoading]);
 };
 
 export default useWithSession;

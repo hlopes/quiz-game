@@ -14,7 +14,7 @@ const App = ({ Component, pageProps }: AppProps) => (
     <>
         {globalStyles}
         <ErrorBoundary>
-            <Providers session={pageProps.session}>
+            <Providers>
                 <Component {...pageProps} />
             </Providers>
         </ErrorBoundary>

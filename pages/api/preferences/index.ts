@@ -1,25 +1,28 @@
-import { updatePreferences } from '@lib/preferences';
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import errors from '@utils/errors';
+import { updatePreferences } from '@lib/player';
 
-const handler = async (req, res) => {
-    const { email, numQuestions = 10, gender = '' } = JSON.parse(req.body);
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    const { name, numQuestions = 3, gender = '' } = JSON.parse(req.body);
 
-    if (!email) {
+    if (!name) {
         res.statusCode = 422;
 
-        return res.json({ ...errors.INVALID_EMAIL });
+        return res.json({ ...errors.INVALID_NAME });
     }
 
     try {
-        await updatePreferences(email, numQuestions, gender);
+        const result = await updatePreferences(name, numQuestions, gender);
 
-        return res.json({
+        return await res.json({
             message: 'Saved successfully',
+            player: result,
         });
     } catch (error) {
         res.statusCode = 500;
 
-        return res.json({ ...errors.UPDATE_USER_PREFERENCES });
+        return res.json(error?.message);
     }
 };
 

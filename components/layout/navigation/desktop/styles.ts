@@ -20,14 +20,6 @@ export const Nav = styled.nav`
     }
 `;
 
-export const ButtonWrapper = styled.div`
-    text-align: left;
-
-    & Button:last-of-type {
-        margin-left: 1rem;
-    }
-`;
-
 export const StyledLink = styled.a`
     ${({ theme }) => getNavLinkStyle(theme)}
 `;

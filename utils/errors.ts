@@ -1,7 +1,7 @@
 export default {
     ALREADY_REGISTERED: {
         errorCode: 100,
-        message: 'User already registered',
+        message: 'Player already registered',
     },
     LOGIN_FORM_DATA_MISSING: {
         errorCode: 101,
@@ -19,13 +19,13 @@ export default {
         errorCode: 104,
         message: 'Secret for token is not defined',
     },
-    INVALID_EMAIL: {
+    INVALID_NAME: {
         errorCode: 105,
-        message: 'Invalid email',
+        message: 'Invalid name',
     },
     ERROR_REGISTERING: {
         errorCode: 106,
-        message: 'Error registering User',
+        message: 'Error registering Player',
     },
     USER_LIST_ERROR: {
         errorCode: 107,

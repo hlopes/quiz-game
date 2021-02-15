@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import useDarkMode from 'use-dark-mode';
 import { NextPage } from 'next';
-import { signout } from 'next-auth/client';
 import { useForm } from 'react-hook-form';
 
 import {
@@ -16,9 +15,8 @@ import {
 } from 'semantic-ui-react';
 
 import useWithSession from '@helpers/useWithSession';
-import userPlayer from '@helpers/usePlayer';
+import usePlayerContext from '@helpers/usePlayerContext';
 import useBreakpoints from '@helpers/useBreakpoints';
-import usePreferences from '@helpers/usePreferences';
 import useHydrationRender from '@helpers/useHydrationRender';
 import Layout from '@components/layout/Layout';
 import GenderInput from '@components/gender-input';
@@ -31,15 +29,16 @@ import {
 } from '@theme/pages/Account.styles';
 
 const Account: NextPage = () => {
+    useWithSession();
+
     const { value: isDark } = useDarkMode(false);
-    const { session, loading } = useWithSession();
     const isHydrationRender = useHydrationRender();
     const { lteSmall } = useBreakpoints();
+    const { isLoading, data, updatePreferences, logout } = usePlayerContext();
 
-    const { wasFetched, data: player, refetch } = userPlayer();
-    const { update } = usePreferences();
-
-    const [gender, setGender] = useState(player?.gender ?? '');
+    const [gender, setGender] = useState(
+        data?.player?.preferences?.gender ?? ''
+    );
 
     const { handleSubmit, register, setValue } = useForm({
         defaultValues: {
@@ -49,26 +48,22 @@ const Account: NextPage = () => {
 
     const submit = useCallback(
         ({ numQuestions }) => {
-            update({ player, numQuestions, gender });
+            if (data) {
+                updatePreferences(data?.player?.name, numQuestions, gender);
+            }
         },
-        [update, player, gender]
+        [data, gender, updatePreferences]
     );
     const handleGender = useCallback((gender) => setGender(gender), []);
-    const handleLogout = useCallback(() => signout(), []);
 
     useEffect(() => {
-        if (session?.user?.email && !player && !wasFetched) {
-            refetch(session.user.name);
+        if (data?.player) {
+            setValue('numQuestions', data?.player?.preferences?.numQuestions);
+            setGender(data?.player?.preferences?.gender);
         }
-    }, [player, refetch, session?.user, wasFetched]);
+    }, [data, setValue]);
 
-    useEffect(() => {
-        if (player) {
-            setValue('numQuestions', parseInt(player.numQuestions, 10));
-        }
-    }, [player, setValue]);
-
-    if (loading || !session || !player) {
+    if (isLoading || !data?.player) {
         return <GlobalLoader isDark={isDark} />;
     }
 
@@ -77,10 +72,15 @@ const Account: NextPage = () => {
             <Segment inverted={isDark} raised padded={lteSmall ? true : 'very'}>
                 <StyledItemGroup>
                     <StyledItem>
-                        {player?.user?.image ? (
+                        {data?.player?.preferences?.gender ? (
                             <Item.Image
                                 size="tiny"
-                                src={player?.user?.image}
+                                src={
+                                    data?.player?.preferences?.gender ===
+                                    'female'
+                                        ? 'female.png'
+                                        : 'male.png'
+                                }
                                 circular
                             />
                         ) : null}
@@ -88,17 +88,13 @@ const Account: NextPage = () => {
                             <List>
                                 <List.Item>
                                     <Icon name="user circle" />
-                                    {player?.user?.name}
-                                </List.Item>
-                                <List.Item>
-                                    <Icon name="mail" />
-                                    {player?.user?.email}
+                                    {data?.player?.name}
                                 </List.Item>
                             </List>
                         </Item.Content>
                     </StyledItem>
                 </StyledItemGroup>
-                <Button primary size="big" onClick={handleLogout}>
+                <Button primary size="big" onClick={logout}>
                     Logout
                 </Button>
                 <Divider />
@@ -109,12 +105,12 @@ const Account: NextPage = () => {
                     <Statistic
                         label="Score"
                         color="olive"
-                        value={player?.user?.points}
+                        value={data?.player?.statistics?.points}
                     />
                     <Statistic
                         label="Questions"
                         color="teal"
-                        value={player?.user?.questionsAnswered}
+                        value={data?.player?.statistics?.questionsAnswered}
                     />
                 </StyledStatisticGroup>
                 <Divider />

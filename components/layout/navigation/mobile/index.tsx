@@ -1,16 +1,13 @@
 import React, { FC, useCallback, useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useSession, signout, signIn } from 'next-auth/client';
-
-import useHydrationRender from '@helpers/useHydrationRender';
-import { Media } from '@components/media/Media';
-import DarkModeToggle from '@components/dark-mode-toggle';
-import { Button } from '@theme/styles';
 
 import { Icon } from 'semantic-ui-react';
 
-import { ButtonWrapper } from '@components/layout/navigation/desktop/styles';
+import usePlayerContext from '@helpers/usePlayerContext';
+import useHydrationRender from '@helpers/useHydrationRender';
+import { Media } from '@components/media/Media';
+import DarkModeToggle from '@components/dark-mode-toggle';
 
 import Burger from './burger-icon';
 
@@ -18,27 +15,13 @@ import { Header, Nav, Overlay } from './styles';
 
 const MobileNavigation: FC = () => {
     const router = useRouter();
-    const [session] = useSession();
     const isHydrationRender = useHydrationRender();
+    const { data } = usePlayerContext();
 
     const burgerRef = useRef(null);
     const sideMenuRef = useRef(null);
 
     const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
-
-    const handleAuthLogin = useCallback(
-        () =>
-            !session
-                ? signIn()
-                : router.pathname !== '/account'
-                ? router.push('/account')
-                : () => {},
-        [session, router]
-    );
-
-    const logoutAction = useCallback(() => {
-        signout();
-    }, []);
 
     const toggleSideMenu = useCallback(() => {
         setIsSideMenuOpen(!isSideMenuOpen);
@@ -83,14 +66,11 @@ const MobileNavigation: FC = () => {
                 <ul>
                     {!isHydrationRender ? (
                         <li>
-                            <Button onClick={handleAuthLogin}>
-                                {session ? (
-                                    <Icon name="user" />
-                                ) : (
-                                    <Icon name="user outline" />
-                                )}
-                                {session ? 'Account' : 'Login'}
-                            </Button>
+                            {data?.player ? (
+                                <Link href={'/account'}>🔓 Account</Link>
+                            ) : (
+                                <Link href={'/signin'}>🔐 Enter Game</Link>
+                            )}
                         </li>
                     ) : null}
                     <li>
@@ -99,17 +79,12 @@ const MobileNavigation: FC = () => {
                     <li>
                         <Link href={'/about'}>About</Link>
                     </li>
-                    {session && router.pathname !== '/game' && (
+                    {data?.player && router.pathname !== '/game' && (
                         <li>
                             <Link href={'/game'}>New Game</Link>
                         </li>
                     )}
                 </ul>
-                <div>
-                    {isHydrationRender && session && (
-                        <Button onClick={logoutAction}>Logout</Button>
-                    )}
-                </div>
             </Nav>
         </Media>
     );

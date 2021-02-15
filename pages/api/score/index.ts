@@ -1,51 +1,29 @@
-import { connectToDatabase } from '@utils/mongodb';
+import { NextApiRequest, NextApiResponse } from 'next';
+
 import errors from '@utils/errors';
+import { updateScore } from '@lib/player';
 
-const handler = async (req, res) => {
-    const { email, points, questions } = JSON.parse(req.body);
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    const { name, points, questions } = JSON.parse(req.body);
 
-    if (!email) {
+    if (!name) {
         res.statusCode = 422;
 
-        return res.json({ ...errors.INVALID_EMAIL });
+        return res.json({ ...errors.INVALID_NAME });
     }
 
-    const { db } = await connectToDatabase();
+    try {
+        const result = await updateScore(name, points, questions);
 
-    const savedUser = await db.collection('users').findOne({ email });
+        return res.json({
+            message: 'Saved successfully',
+            player: result,
+        });
+    } catch (error) {
+        res.statusCode = 500;
 
-    if (!savedUser) {
-        res.statusCode = 422;
-
-        return res.json({ ...errors.INVALID_EMAIL });
+        return res.json(error?.message);
     }
-
-    await db.collection('users').updateOne(
-        { email },
-        {
-            $set: {
-                points: savedUser?.points ? savedUser?.points + points : points,
-                questionsAnswered: savedUser?.questionsAnswered
-                    ? savedUser?.questionsAnswered + questions
-                    : questions,
-            },
-        }
-    );
-
-    const foundUser = await db.collection('users').findOne({ email });
-
-    await db.collection('preferences').updateOne(
-        { 'user.email': email },
-        {
-            $set: {
-                user: foundUser,
-            },
-        }
-    );
-
-    return res.json({
-        message: 'Saved successfully',
-    });
 };
 
 export default handler;

@@ -12,11 +12,11 @@ import {
     Divider,
 } from 'semantic-ui-react';
 
-import { getTopPlayers } from '@lib/user';
+import { getTopPlayers } from '@lib/player';
 import useBreakpoints from '@helpers/useBreakpoints';
 import Layout from '@components/layout/Layout';
 
-import { User } from '../types/User';
+import { Player } from '../types/Player';
 
 export const getStaticProps = async () => {
     const top = await getTopPlayers();
@@ -29,7 +29,7 @@ export const getStaticProps = async () => {
 };
 
 type HomeProps = {
-    top: User[];
+    top: Player[];
 };
 
 const Home: NextPage<HomeProps> = ({ top }: HomeProps) => {
@@ -68,10 +68,16 @@ const Home: NextPage<HomeProps> = ({ top }: HomeProps) => {
                                     <Table.Row key={index}>
                                         <Table.Cell>
                                             <Header as="h4" image>
-                                                {player?.image ? (
+                                                {player?.preferences?.gender ? (
                                                     <Image
                                                         alt={player?.name}
-                                                        src={player?.image}
+                                                        src={
+                                                            player?.preferences
+                                                                ?.gender ===
+                                                            'female'
+                                                                ? 'female.png'
+                                                                : 'male.png'
+                                                        }
                                                         rounded
                                                         size="mini"
                                                     />
@@ -87,18 +93,21 @@ const Home: NextPage<HomeProps> = ({ top }: HomeProps) => {
                                             {player?.name}
                                         </Table.Cell>
                                         <Table.Cell textAlign="right">
-                                            {player?.points > 0 ? (
+                                            {player?.statistics?.points > 0 ? (
                                                 <Label color="blue">
-                                                    {player?.points}
+                                                    {player?.statistics?.points}
                                                 </Label>
                                             ) : (
                                                 <Label color="yellow">
-                                                    {player?.points}
+                                                    {player?.statistics?.points}
                                                 </Label>
                                             )}
                                         </Table.Cell>
                                         <Table.Cell textAlign="right">
-                                            {player?.questionsAnswered}
+                                            {
+                                                player?.statistics
+                                                    ?.questionsAnswered
+                                            }
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}

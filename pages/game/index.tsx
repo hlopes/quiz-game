@@ -17,9 +17,8 @@ import {
 
 import getQuestionImage from '@utils/getQuestionImage';
 import useGetQuestions from '@helpers/useGetQuestions';
-import useSetScore from '@helpers/useSetScore';
 import useWithSession from '@helpers/useWithSession';
-import userPlayer from '@helpers/usePlayer';
+import usePlayerContext from '@helpers/usePlayerContext';
 import Layout from '@components/layout/Layout';
 import Question from '@components/question/Question';
 import GlobalLoader from '@components/global-loader';
@@ -58,21 +57,16 @@ const questionDifficultyTypes: DifficultyType[] = [
 ];
 
 const Game: FC = () => {
-    const { value: isDark } = useDarkMode(false);
-    const { session, loading } = useWithSession();
+    useWithSession();
 
+    const { value: isDark } = useDarkMode(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [score, setScore] = useState(0);
     const [displayScore, setDisplayScore] = useState(false);
     const [isCorrect, setIsCorrect] = useState(null);
 
-    const {
-        refetch: refetchPlayer,
-        data: player,
-        isValidating,
-        wasFetched: playerFetched,
-    } = userPlayer();
+    const { data, isLoading, updateScore } = usePlayerContext();
 
     const {
         refetch: refetchQuestions,
@@ -82,27 +76,26 @@ const Game: FC = () => {
         wasFetched: questionsFetched,
     } = useGetQuestions();
 
-    const { setScore: setScoreAPI } = useSetScore();
-
     const currentQuestion = useMemo(
         () => getQuestionsData?.results?.[currentQuestionIndex],
         [currentQuestionIndex, getQuestionsData?.results]
     );
 
-    const email = player?.user?.email;
+    const player = data?.player;
+    const name = data?.player?.name;
+    const numQuestions = player?.preferences?.numQuestions;
 
-    const updateScore = useCallback(
+    const updateFinalScore = useCallback(
         async (finalScore) => {
-            await setScoreAPI({
-                player,
-                email,
-                points: finalScore,
-                questions: getQuestionsData?.results?.length,
-            });
+            await updateScore(
+                name,
+                finalScore,
+                getQuestionsData?.results?.length
+            );
 
             setDisplayScore(true);
         },
-        [email, getQuestionsData?.results?.length, player, setScoreAPI]
+        [name, getQuestionsData?.results?.length, updateScore]
     );
 
     const handleNext = useCallback(
@@ -113,11 +106,11 @@ const Game: FC = () => {
 
             let currentScore = isCorrect ? score + 1 : score;
 
-            if (currentQuestion?.difficulty === 'medium') {
+            if (currentQuestion?.difficulty === 'medium' && isCorrect) {
                 currentScore += 1;
             }
 
-            if (currentQuestion?.difficulty === 'hard') {
+            if (currentQuestion?.difficulty === 'hard' && isCorrect) {
                 currentScore += 2;
             }
 
@@ -139,7 +132,7 @@ const Game: FC = () => {
                     return setIsCorrect(null);
                 }
 
-                return updateScore(currentScore);
+                return updateFinalScore(currentScore);
             };
 
             if (!selectedAnswer) {
@@ -153,7 +146,7 @@ const Game: FC = () => {
             currentQuestion?.correct_answer,
             currentQuestion?.difficulty,
             score,
-            updateScore,
+            updateFinalScore,
             currentQuestionIndex,
             getQuestionsData?.results?.length,
         ]
@@ -171,22 +164,14 @@ const Game: FC = () => {
         setDisplayScore(false);
         setIsCorrect(null);
 
-        refetchQuestions(player?.numQuestions);
-    }, [refetchQuestions, player]);
-
-    const sessionUser = session?.user;
+        refetchQuestions(numQuestions);
+    }, [refetchQuestions, numQuestions]);
 
     useEffect(() => {
-        if (sessionUser?.email && !isValidating && !player && !playerFetched) {
-            refetchPlayer(sessionUser.name);
+        if (player && numQuestions && !questionsFetched) {
+            refetchQuestions(numQuestions);
         }
-    }, [isValidating, player, refetchPlayer, sessionUser, playerFetched]);
-
-    useEffect(() => {
-        if (player && !questionsFetched) {
-            refetchQuestions(player?.numQuestions);
-        }
-    }, [player, refetchQuestions, questionsFetched]);
+    }, [numQuestions, refetchQuestions, questionsFetched, player]);
 
     const questionDifficultyType: DifficultyType = questionDifficultyTypes.filter(
         (type) => type?.value === currentQuestion?.difficulty
@@ -213,7 +198,7 @@ const Game: FC = () => {
         getQuestionsError ||
         (getQuestionsData && getQuestionsData.response_code !== 0);
 
-    if (loading || !session || !player) {
+    if (isLoading || player === null) {
         return <GlobalLoader isDark={isDark} />;
     }
 
@@ -264,9 +249,9 @@ const Game: FC = () => {
                 ) : (
                     <>
                         <p>
-                            Game Points: <strong>{totalScore}</strong> / Current
-                            Score:
-                            <strong>{score}</strong>
+                            Current Score:
+                            <strong>{score}</strong> / Game Points:{' '}
+                            <strong>{totalScore}</strong>
                         </p>
                         <Card fluid style={{ boxShadow: 'none' }}>
                             <CardContent>

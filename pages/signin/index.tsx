@@ -1,15 +1,14 @@
 import React from 'react';
 import { NextPage } from 'next';
-
-import Layout from '@components/layout/Layout';
-import SigninForm from '@components/signin-form';
-
-import { Header, Segment } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import useDarkMode from 'use-dark-mode';
 
 import useBreakpoints from '@helpers/useBreakpoints';
 import usePlayerContext from '@helpers/usePlayerContext';
 import GlobalLoader from '@components/global-loader';
+import Layout from '@components/layout/Layout';
+import SigninForm from '@components/signin-form';
+import { StyledSegment } from '@theme/styles';
 
 const SignIn: NextPage = () => {
     const { value: isDark } = useDarkMode(false);
@@ -19,9 +18,14 @@ const SignIn: NextPage = () => {
     if (isLoading) {
         return <GlobalLoader isDark={isDark} />;
     }
+
     return (
         <Layout>
-            <Segment inverted={isDark} raised padded={lteSmall ? true : 'very'}>
+            <StyledSegment
+                inverted={isDark}
+                raised
+                padded={lteSmall ? true : 'very'}
+            >
                 <Header as="h1">Enter your credentials</Header>
                 <p>
                     You can insert any username. Please do not use a valid/real
@@ -29,7 +33,7 @@ const SignIn: NextPage = () => {
                 </p>
                 <p>(existing account: abc/123)</p>
                 <SigninForm />
-            </Segment>
+            </StyledSegment>
         </Layout>
     );
 };

@@ -2,10 +2,14 @@ import styled from '@emotion/styled';
 
 import { black } from '@theme/colors';
 import { getNavLinkStyle, shadow } from '@theme/styles';
-import { above, background } from '@theme/layers';
+import { above, background, nav } from '@theme/layers';
 
 export const Header = styled.header`
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: ${nav};
+    width: 100%;
     height: var(--header-height);
     color: ${({ theme }: { theme: any }) => theme.text?.primary};
     background-color: ${({ theme }: { theme: any }) => theme.bg?.primary};

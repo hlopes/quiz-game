@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { Wrapper, StyledInput } from './styles';
 
-const Toggle = ({ checked, onChange }) => (
+type ToggleProps = {
+    checked: boolean;
+    onChange: () => void;
+};
+
+const Toggle: FC<ToggleProps> = ({ checked, onChange }: ToggleProps) => (
     <Wrapper className="toggle-control">
         <StyledInput
             id="dmcheck"

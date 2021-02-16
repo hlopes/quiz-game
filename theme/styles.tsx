@@ -4,6 +4,10 @@ import { ToastContainer } from 'react-toastify';
 import { css, Global } from '@emotion/react';
 import styled from '@emotion/styled';
 
+import { gteSmallMedia } from '@theme/custom-media';
+
+import { Segment } from 'semantic-ui-react';
+
 import normalize from './normalize';
 import variables from './variables';
 import semanticOverride from './semantic-ui-overrides';
@@ -158,3 +162,13 @@ export const getNavLinkStyle = (theme) => {
         }
     `;
 };
+
+export const StyledSegment = styled(Segment)`
+    &.ui.segment {
+        margin-top: 5.8rem !important;
+
+        ${gteSmallMedia} {
+            margin-top: 7.4rem !important;
+        }
+    }
+`;

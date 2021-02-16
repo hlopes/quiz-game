@@ -3,18 +3,12 @@ import useDarkMode from 'use-dark-mode';
 import { NextPage } from 'next';
 import isEmpty from 'lodash/isEmpty';
 
-import {
-    Label,
-    Header,
-    Segment,
-    Table,
-    Image,
-    Divider,
-} from 'semantic-ui-react';
+import { Label, Header, Table, Image, Divider } from 'semantic-ui-react';
 
 import { getTopPlayers } from '@lib/player';
 import useBreakpoints from '@helpers/useBreakpoints';
 import Layout from '@components/layout/Layout';
+import { StyledSegment } from '@theme/styles';
 
 import { Player } from '../types/Player';
 
@@ -38,7 +32,11 @@ const Home: NextPage<HomeProps> = ({ top }: HomeProps) => {
 
     return (
         <Layout>
-            <Segment inverted={isDark} raised padded={lteSmall ? true : 'very'}>
+            <StyledSegment
+                inverted={isDark}
+                raised
+                padded={lteSmall ? true : 'very'}
+            >
                 <Header as="h1">Welcome to Quiz Game</Header>
                 <p>This is just a game built with NextJS.</p>
                 <br />
@@ -115,7 +113,7 @@ const Home: NextPage<HomeProps> = ({ top }: HomeProps) => {
                         </Table>
                     </>
                 ) : null}
-            </Segment>
+            </StyledSegment>
         </Layout>
     );
 };

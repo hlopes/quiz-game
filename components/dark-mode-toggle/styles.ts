@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
 
     & > button {
         color: #ffe600;
-        font-size: 1.2em;
+        font-size: 1.2rem;
         background: none;
         border: none;
         cursor: pointer;

@@ -1,10 +1,9 @@
 import React, { FC } from 'react';
+import useDarkMode from 'use-dark-mode';
 
 import useBreakpoints from '@helpers/useBreakpoints';
 import getAboutData from '@lib/about';
 import Layout from '@components/layout/Layout';
-
-import useDarkMode from 'use-dark-mode';
 
 import { StyledSegment } from '@theme/pages/About.styles';
 

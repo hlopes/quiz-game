@@ -6,7 +6,7 @@ import MobileNavigation from '@components/layout/navigation/mobile';
 import DesktopNavigation from '@components/layout/navigation/desktop';
 import Footer from '@components/layout/footer';
 
-import { Main } from './Layout.styles';
+import { Main, Background } from './Layout.styles';
 
 type Props = {
     children: any;
@@ -20,6 +20,7 @@ const Layout: FC<Props> = ({ children }: Props) => {
                 <DesktopNavigation />
                 <MobileNavigation />
             </MediaContextProvider>
+            <Background />
             {children}
             <Footer />
         </Main>

@@ -1,9 +1,17 @@
-import React, { useCallback } from 'react';
+import React, { FC, useCallback } from 'react';
 import { Image } from 'semantic-ui-react';
 
 import { SelectedImage } from './styles';
 
-const GenderInput = ({ gender, onSetGender }) => {
+type GenderInputProps = {
+    gender: string;
+    onSetGender: (string) => void;
+};
+
+const GenderInput: FC<GenderInputProps> = ({
+    gender,
+    onSetGender,
+}: GenderInputProps) => {
     const handleGender = useCallback((gender) => () => onSetGender(gender), [
         onSetGender,
     ]);

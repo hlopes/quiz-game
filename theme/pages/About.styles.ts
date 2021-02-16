@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 
-import { Segment } from 'semantic-ui-react';
+import { StyledSegment as BaseSegment } from '@theme/styles';
 
-export const StyledSegment = styled(Segment)`
+export const StyledSegment = styled(BaseSegment)`
     text-align: left;
 
     img {

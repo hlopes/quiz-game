@@ -12,24 +12,5 @@ export default css`
 
         --header-height: ${headerHeightMobile};
         --header-height-desktop: ${headerHeightDesktop};
-
-        /* Segment UI overrides */
-
-        h1.ui.header {
-            ${h1}
-        }
-
-        h3.ui.header {
-            ${h3}
-        }
-
-        .ui.table {
-            margin: 0 auto;
-            font-size: 1.4rem;
-        }
-
-        .ui.blue.label {
-            font-size: 1.4rem;
-        }
     }
 `;

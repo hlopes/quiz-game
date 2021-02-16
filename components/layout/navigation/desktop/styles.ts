@@ -1,9 +1,13 @@
 import styled from '@emotion/styled';
 
 import { getNavLinkStyle, shadow } from '@theme/styles';
+import { nav } from '@theme/layers';
 
 export const Nav = styled.nav`
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: ${nav};
     display: flex;
     align-items: center;
     width: 100%;

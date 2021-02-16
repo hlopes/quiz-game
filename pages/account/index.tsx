@@ -3,16 +3,7 @@ import useDarkMode from 'use-dark-mode';
 import { NextPage } from 'next';
 import { useForm } from 'react-hook-form';
 
-import {
-    Button,
-    Divider,
-    Item,
-    Form,
-    List,
-    Segment,
-    Statistic,
-    Icon,
-} from 'semantic-ui-react';
+import { Divider, Item, Form, List, Statistic, Icon } from 'semantic-ui-react';
 
 import useWithSession from '@helpers/useWithSession';
 import usePlayerContext from '@helpers/usePlayerContext';
@@ -21,6 +12,7 @@ import useHydrationRender from '@helpers/useHydrationRender';
 import Layout from '@components/layout/Layout';
 import GenderInput from '@components/gender-input';
 import GlobalLoader from '@components/global-loader';
+import { StyledSegment } from '@theme/styles';
 
 import {
     StyledItemGroup,
@@ -70,7 +62,11 @@ const Account: NextPage = () => {
 
     return (
         <Layout>
-            <Segment inverted={isDark} raised padded={lteSmall ? true : 'very'}>
+            <StyledSegment
+                inverted={isDark}
+                raised
+                padded={lteSmall ? true : 'very'}
+            >
                 <StyledItemGroup>
                     <Item>
                         {data?.player?.preferences?.gender ? (
@@ -138,7 +134,7 @@ const Account: NextPage = () => {
                         Save
                     </StyledSaveButton>
                 </Form>
-            </Segment>
+            </StyledSegment>
         </Layout>
     );
 };

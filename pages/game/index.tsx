@@ -7,7 +7,6 @@ import {
     Loader,
     Card,
     Icon,
-    Segment,
     Button,
     Label,
     Statistic,
@@ -22,6 +21,7 @@ import usePlayerContext from '@helpers/usePlayerContext';
 import Layout from '@components/layout/Layout';
 import Question from '@components/question/Question';
 import GlobalLoader from '@components/global-loader';
+import { StyledSegment } from '@theme/styles';
 
 import {
     DifficultyLabel,
@@ -205,10 +205,14 @@ const Game: FC = () => {
     if (hasError) {
         return (
             <Layout>
-                <Segment inverted={isDark} padded style={{ marginTop: '2em' }}>
+                <StyledSegment
+                    inverted={isDark}
+                    padded
+                    style={{ marginTop: '2em' }}
+                >
                     <Icon name="exclamation triangle" color="red" />
                     Something went wrong fetching the questions
-                </Segment>
+                </StyledSegment>
             </Layout>
         );
     }
@@ -220,7 +224,11 @@ const Game: FC = () => {
         </Dimmer>
     ) : (
         <Layout>
-            <Segment inverted={isDark} padded style={{ marginTop: '2em' }}>
+            <StyledSegment
+                inverted={isDark}
+                padded
+                style={{ marginTop: '2em' }}
+            >
                 {displayScore ? (
                     <>
                         <Header as="h2">Your Score is</Header>
@@ -321,7 +329,7 @@ const Game: FC = () => {
                         </Card>
                     </>
                 )}
-            </Segment>
+            </StyledSegment>
         </Layout>
     );
 };

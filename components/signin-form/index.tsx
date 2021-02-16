@@ -1,6 +1,5 @@
 import React, { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import useDarkMode from 'use-dark-mode';
 import { useRouter } from 'next/router';
 
 import { Form, Button } from 'semantic-ui-react';
@@ -8,14 +7,12 @@ import { Form, Button } from 'semantic-ui-react';
 import usePlayerContext from '@helpers/usePlayerContext';
 import { useNotificationContext } from '@helpers/useNotificationsContext';
 import { Error } from '@theme/styles';
-import GlobalLoader from '@components/global-loader';
 
 import { Category } from '../../types/NotificationContext';
 
 import { StyledForm } from './styles';
 
 const SigninForm: FC = () => {
-    const { value: isDark } = useDarkMode(false);
     const router = useRouter();
     const { handleSubmit, register, errors } = useForm();
 

@@ -2,8 +2,6 @@ import React, { FC, useCallback, useRef, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { Icon } from 'semantic-ui-react';
-
 import usePlayerContext from '@helpers/usePlayerContext';
 import useHydrationRender from '@helpers/useHydrationRender';
 import { Media } from '@components/media/Media';

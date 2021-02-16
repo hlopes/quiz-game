@@ -1,8 +1,7 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import he from 'he';
-import isEmpty from 'lodash/isEmpty';
-
 import { Button } from 'semantic-ui-react';
+import isEmpty from 'lodash/isEmpty';
 
 import shuffle from '@utils/shuffle';
 

@@ -12,7 +12,7 @@ import { StyledSegment } from '@theme/styles';
 
 import { Player } from '../types/Player';
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
     const top = await getTopPlayers();
 
     return {
